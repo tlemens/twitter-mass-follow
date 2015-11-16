@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Twitter Mass Follow",
+  "version": "0.0.0.1",
+  "minimum_chrome_version": "41.0.0.0",
+  "description": "Autofollow and unfollow on twitter",
+  "homepage_url": "https://github.com/tlemens/twitter-mass-follow",
+  "permissions": ["storage", "https://twitter.com/*", "unlimitedStorage"],
+  "content_scripts": [
+    {
+      "matches":  ["https://twitter.com/*"],
+      "js":       ["js/jquery-2.1.4.min.js", "js/twitter_mass_follow.min.js"],
+      "css":      ["css/twitter_mass_follow.min.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    "html/actions.html"
+  ],
+  "icons": {
+    "48":   "icon48.png",
+    "128":  "icon128.png" 
+  }
+}
