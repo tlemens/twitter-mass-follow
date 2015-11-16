@@ -16,7 +16,6 @@
   "web_accessible_resources": [
     "html/actions.html"
   ],
-  "homepage_url": "https://github.com/tlemens/twitter-mass-follow",
   "icons": {
     "48":   "icon48.png",
     "128":  "icon128.png" 
