@@ -102,6 +102,9 @@ $.extend(Profile.prototype, {
   isFollowable: function() {
     return this.$btn.children('.follow-text').is(':visible');
   },
+  isFollowed: function() {
+    return this.$btn.children('.following-text').is(':visible');
+  },
   follow: function() {
     if ( this.isFollowable() ) {
       if ( !Record.includes(this.id) ) {
