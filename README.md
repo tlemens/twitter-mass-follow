@@ -2,6 +2,8 @@
 
 Auto mass follow and unfollow on twitter.
 
+![Twitter Mass Follow](https://github.com/tlemens/twitter-mass-follow/blob/master/icon128.png)
+
 ## Installation
 
 Add [Chrome extension](https://chrome.google.com/webstore/detail/twitter-mass-follow/lfmanfkmmgfigbnjibfemdnnfjboficn)
