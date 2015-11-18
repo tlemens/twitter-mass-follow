@@ -1,10 +1,11 @@
 {
   "manifest_version": 2,
   "name": "Twitter Mass Follow",
-  "version": "0.0.0.1",
+  "version": "0.0.0.2",
   "minimum_chrome_version": "41.0.0.0",
-  "description": "Autofollow and unfollow on twitter",
+  "description": "Auto bulk follow and unfollow on twitter with style",
   "homepage_url": "https://github.com/tlemens/twitter-mass-follow",
+  "author": "www.tlemens.de",
   "permissions": ["storage", "https://twitter.com/*", "unlimitedStorage"],
   "content_scripts": [
     {

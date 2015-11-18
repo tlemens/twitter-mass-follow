@@ -1,6 +1,6 @@
 # Twitter Mass Follow
 
-Auto mass follow and unfollow on twitter.
+Auto bulk follow and unfollow on twitter with style.
 
 ![Twitter Mass Follow](https://github.com/tlemens/twitter-mass-follow/blob/master/icon128.png)
 
