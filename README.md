@@ -16,6 +16,15 @@ Add [Chrome extension](https://chrome.google.com/webstore/detail/twitter-mass-fo
 
 While mass following, already once **unfollowed** profiles will be skipped. The data is stored in the Chrome local storage.
 
+## Features
+
+* Mass follow all, who have never been unfollowed
+* Mass unfollow all, who do not follow you
+* Counter
+* Pause and resume bulk follow/unfollow
+* Inplace logs
+* Works also on the search accounts page
+
 ## License
 
 [MIT](http://clemenst.mit-license.org)
