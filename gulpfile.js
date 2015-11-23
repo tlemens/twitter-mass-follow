@@ -9,7 +9,7 @@ gulp.task('css', function() {
 
   return gulp.src('./src/twitter_mass_follow.css')
           .pipe(postcss(processors))
-          .pipe(nano())
+          .pipe(nano({zindex: false}))
           .pipe(rename({ suffix: '.min' }))
           .pipe(gulp.dest("./css"));
 });
