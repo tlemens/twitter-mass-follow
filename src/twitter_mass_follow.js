@@ -127,10 +127,12 @@ $.extend(Profile.prototype, {
     }
   },
   unfollow: function() {
-    if ( (tmf.withoutException && this.isFollowed()) || (this.isNotFollowing() && this.isFollowed()) ) {
-      this.click();
-      tmf.unfollowBtn.incrementCount();
-      Record.add(this.id);
+    if ( this.isFollowed() ) {
+      if ( tmf.withoutException || this.isNotFollowing() ) {
+        this.click();
+        tmf.unfollowBtn.incrementCount();
+        Record.add(this.id);
+      }
     }
   },
   click: function() {
