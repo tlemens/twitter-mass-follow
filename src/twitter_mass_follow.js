@@ -48,11 +48,22 @@ var tmf = {
         self.followBtn = new Button($('.tmf-btn--follow'), function() {  this.follow(); });
         self.unfollowBtn = new Button($('.tmf-btn--unfollow'), function() {  this.unfollow(); });
         self.$el.addClass('flipInY');
+        $('#tmf_without_exception').on('change', function() {
+          self.withoutException = this.checked;
+          if ( this.checked ) {
+            self.followBtn.$subtitle.text('without exception');
+            self.unfollowBtn.$subtitle.text('without exception');
+          } else {
+            self.followBtn.$subtitle.text('who have never been unfollowed');
+            self.unfollowBtn.$subtitle.text('who do not follow you');
+          }
+        });
       });
     } else {
       this.$el.addClass('flipOutY');
     }
-  }
+  },
+  withoutException: false
 }
 
 function Button($el, profileAction) {
@@ -107,7 +118,7 @@ $.extend(Profile.prototype, {
   },
   follow: function() {
     if ( this.isFollowable() ) {
-      if ( !Record.includes(this.id) ) {
+      if ( tmf.withoutException || !Record.includes(this.id) ) {
         this.click();
         tmf.followBtn.incrementCount();
       } else {
@@ -116,7 +127,7 @@ $.extend(Profile.prototype, {
     }
   },
   unfollow: function() {
-    if ( this.isNotFollowing() && this.isFollowed() ) {
+    if ( (tmf.withoutException && this.isFollowed()) || (this.isNotFollowing() && this.isFollowed()) ) {
       this.click();
       tmf.unfollowBtn.incrementCount();
       Record.add(this.id);

@@ -68,11 +68,21 @@
   z-index: 9999;
 }
 
-.tmf--active .tmf-btn {
+.tmf--active .tmf-btn,
+.tmf--active .tmf__options {
   display: none;
 }
+
 .tmf--active .tmf-btn--active {
   display: block;
+}
+
+.tmf__options {
+  margin: 15px;
+}
+
+.tmf__without-exception {
+  vertical-align: middle;
 }
 
 .tmf-btn {
