@@ -17,6 +17,7 @@ While mass following, already once **unfollowed** profiles will be skipped. The 
 
 * Mass follow all, who have never been unfollowed
 * Mass unfollow all, who do not follow you
+* without exception option
 * Counter
 * Pause and resume bulk follow/unfollow
 * Inplace logs
