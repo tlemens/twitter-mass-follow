@@ -48,6 +48,16 @@ var tmf = {
         self.followBtn = new Button($('.tmf-btn--follow'), function() {  this.follow(); });
         self.unfollowBtn = new Button($('.tmf-btn--unfollow'), function() {  this.unfollow(); });
         self.$el.addClass('flipInY');
+        var messageObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            var html = $('#message-drawer').html();
+            // http://support.twitter.com/articles/66885-i-can-t-follow-people-follow-limits
+            if ( html.includes('66885') ) {
+              self.followBtn.setIdle();
+            }
+          });    
+        });
+        messageObserver.observe(document.getElementById('message-drawer'), { subtree: true, characterData: true, childList: true });
         $('#tmf_without_exception').on('change', function() {
           self.withoutException = this.checked;
           if ( this.checked ) {
@@ -89,6 +99,27 @@ $.extend(Button.prototype, {
   incrementCount: function() {
     this.count++;
     this.$title.text(this.count);
+  },
+  setIdle: function() {
+    var self = this;
+    if ( !self.action.paused ) {
+      var count = 60;
+      self.action.pause();
+      var countDown = setInterval(function() {
+        if ( self.action.paused ) {
+          self.$subtitle.text('Continuing in ' + count + ' seconds...');
+          if ( 0 == count ) {
+            clearInterval(countDown);
+            $('#message-drawer').find('.message-text').text("");
+            self.$el.click();
+          } else {
+            count--;
+          }
+        } else {
+          clearInterval(countDown);
+        }
+      }, 1000);
+    }
   }
 });
 
