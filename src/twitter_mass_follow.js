@@ -45,8 +45,8 @@ var tmf = {
     if ( $('.ProfileCard').length > 10 ) {
       self.$el.load(chrome.extension.getURL('html/actions.html'), {}, function() {
         $('.tmf-btn').on('click', function() { self.$el.addClass('tmf--active') });
-        self.followBtn = new Button($('.tmf-btn--follow'), function() {  this.follow(); });
-        self.unfollowBtn = new Button($('.tmf-btn--unfollow'), function() {  this.unfollow(); });
+        self.followBtn = new Button($('.tmf-btn--follow'), function() {  this.follow(); }, 250);
+        self.unfollowBtn = new Button($('.tmf-btn--unfollow'), function() {  this.unfollow(); }, 100);
         self.$el.addClass('flipInY');
         var messageObserver = new MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
@@ -76,13 +76,14 @@ var tmf = {
   withoutException: false
 }
 
-function Button($el, profileAction) {
+function Button($el, profileAction, interval) {
   var self = this;
   self.$el = $el;
   self.count = 0;
   self.$title = $el.find('.tmf-btn__title');
   self.$subtitle = $el.find('.tmf-btn__subtitle');
-  self.action = new BulkAction(profileAction);
+  self.action = new BulkAction(profileAction, interval);
+  
   self.$el.on('click', function() {
     self.$el.addClass('tmf-btn--active');
     self.$title.text(self.count);
@@ -180,8 +181,9 @@ $.extend(Profile.prototype, {
   }
 });
 
-function BulkAction(callback) {
+function BulkAction(callback, interval) {
   this.callback = callback;
+  this.interval = interval;
   this.paused = true;
 }
 
@@ -210,7 +212,7 @@ $.extend(BulkAction.prototype, {
       this.last = profile;
       this.nth++;
       if ( profile.clicked ) {
-        this._sleep(100);
+        this._sleep(this.interval);
       } else {
         this.run();
       }
