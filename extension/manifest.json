@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Twitter Mass Follow",
-  "version": "1.1",
+  "name": "Twitter Mass Follow Dev",
+  "version": "2.0",
   "minimum_chrome_version": "41.0.0.0",
   "description": "Auto bulk follow and unfollow on twitter with style",
   "homepage_url": "http://tlemens.de",
@@ -10,12 +10,13 @@
   "content_scripts": [
     {
       "matches":  ["https://twitter.com/*"],
-      "js":       ["js/jquery-2.1.4.min.js", "js/twitter_mass_follow.min.js"],
-      "css":      ["css/twitter_mass_follow.min.css"]
+      "js":       ["extension.js"],
+      "css":      ["extension.css"]
     }
   ],
   "web_accessible_resources": [
-    "html/actions.html"
+    "extension.html",
+    "*.js"
   ],
   "icons": {
     "48":   "icon48.png",
