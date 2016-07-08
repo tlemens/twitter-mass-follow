@@ -27,7 +27,7 @@ class Session {
   _observeActivityStream(callback) {
     let observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if ( document.getElementsByClassName('activity-popup-users') > 0 ) {
+        if ( document.getElementsByClassName('activity-popup-users').length > 0 ) {
           console.log(mutation)
           callback.call()
         }

@@ -55,17 +55,21 @@
   animation-fill-mode: both;
 }
 
-.twitter-mass-follow {
-  position: fixed;
-  top: 100px;
-  right: 30px;
+.tmf {
   background: white;
   box-shadow: rgba(46, 46, 46, 0.5) 1px 1px 5px;
+  box-sizing: border-box;
   border-radius: 5px;
+  display: none;
   max-width: 350px;
   padding: 15px;
-  box-sizing: border-box;
+  position: fixed;
+  right: 30px;
+  top: 100px;
   z-index: 9999;
+  &--show {
+    display: block;
+  }
 }
 
 .tmf--active .tmf-btn,

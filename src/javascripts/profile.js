@@ -1,6 +1,31 @@
+let nth = 0
+
 class Profile {
-  
+  static all() {
+    return CardProfile.all().concat(StreamProfile.all())
+  }
+  static next() {
+    Profile.all()[nth]
+    nth++
+  }
+  static present() {
+    nth = 0
+    return (Profile.all().length > 8)
+  }
 }
+
+class CardProfile extends Profile {
+  static all() {
+    return [...document.getElementsByClassName('ProfileCard')]
+  }
+}
+
+class StreamProfile extends Profile {
+  static all() {
+    return [...document.getElementsByClassName('account')]
+  }
+}
+
 export default Profile;
 /*
 function Profile(nth) {

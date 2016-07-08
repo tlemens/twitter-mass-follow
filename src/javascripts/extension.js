@@ -1,32 +1,15 @@
-// this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId
-//
 import TwitterMassFollow from './twitter_mass_follow.js'
 import Session from './session.js'
-import CardProfile from './card_profile.js'
-import StreamProfile from './stream_profile.js'
 
 let extension = new TwitterMassFollow()
 
 extension.load().then(() => {
   let session = new Session()
-  
   session.pageChanged(() => {  
-    let streamProfilesPresent = StreamProfile.isPresent()
-    let cardProfilesPresent = CardProfile.isPresent()
-    let profilesPresent = streamProfilesPresent || cardProfilesPresent
-    if ( profilesPresent ) {
-      let extension.unfollow = session.showsMyFollowers()
-      extension.getProfile = (nth) => {
-        if (streamProfilesPresent) {
-          return StreamProfile.nth(nth)
-        } else if (cardProfilesPresent) {
-          return CardProfile.nth(nth)
-        }
-      }
-      extension.show()
-    } else {
-      extension.hide()
-    }
+    extension.showOrHide()
+  })
+  session.limitExceeded(() => {
+    extension.twitterLimitExceeded()
   })
 })
   

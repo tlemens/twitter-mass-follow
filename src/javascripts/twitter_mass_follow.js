@@ -1,4 +1,6 @@
 import Button from './button.js'
+import Profile from './profile.js'
+
 class TwitterMassFollow {
   constructor() {
   }
@@ -10,7 +12,7 @@ class TwitterMassFollow {
         if (xhttp.readyState == 4) {
           if (xhttp.status == 200) {
             this.element = document.createElement('div')
-            this.element.className = 'twitter-mass-follow'
+            this.element.className = 'tmf'
             this.element.innerHTML = xhttp.responseText
             document.body.appendChild(this.element)
             resolve()
@@ -21,6 +23,20 @@ class TwitterMassFollow {
       }
       xhttp.send(null)
     })
+  }
+  showOrHide() {
+    if ( Profile.present() ) {
+      this.show()
+    } else {
+      this.hide()
+    }
+  }
+  show() {
+    this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId
+    this.element.classList.add('tmf--show')
+  }
+  hide() {
+    this.element.classList.remove('tmf--show')
   }
 }
 export default TwitterMassFollow;
