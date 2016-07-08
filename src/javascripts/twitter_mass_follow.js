@@ -1,3 +1,4 @@
+import Button from './button.js'
 class TwitterMassFollow {
   constructor() {
   }

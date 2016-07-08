@@ -15,8 +15,7 @@
     }
   ],
   "web_accessible_resources": [
-    "extension.html",
-    "*.js"
+    "extension.html"
   ],
   "icons": {
     "48":   "icon48.png",

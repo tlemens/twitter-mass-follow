@@ -1,10 +1,35 @@
+// this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId
+//
 import TwitterMassFollow from './twitter_mass_follow.js'
+import Session from './session.js'
+import CardProfile from './card_profile.js'
+import StreamProfile from './stream_profile.js'
 
 let extension = new TwitterMassFollow()
 
-extension.load().then(() => 
-);
-
+extension.load().then(() => {
+  let session = new Session()
+  
+  session.pageChanged(() => {  
+    let streamProfilesPresent = StreamProfile.isPresent()
+    let cardProfilesPresent = CardProfile.isPresent()
+    let profilesPresent = streamProfilesPresent || cardProfilesPresent
+    if ( profilesPresent ) {
+      let extension.unfollow = session.showsMyFollowers()
+      extension.getProfile = (nth) => {
+        if (streamProfilesPresent) {
+          return StreamProfile.nth(nth)
+        } else if (cardProfilesPresent) {
+          return CardProfile.nth(nth)
+        }
+      }
+      extension.show()
+    } else {
+      extension.hide()
+    }
+  })
+})
+  
 /*
 $.fn.isPresent = function() {
   return this.length > 0;
@@ -26,16 +51,6 @@ var tmf = {
         self.followBtn = new Button($('.tmf-btn--follow'), function() {  this.follow(); }, 250);
         self.unfollowBtn = new Button($('.tmf-btn--unfollow'), function() {  this.unfollow(); }, 100);
         self.$el.addClass('flipInY');
-        var messageObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            var html = $('#message-drawer').html();
-            // http://support.twitter.com/articles/66885-i-can-t-follow-people-follow-limits
-            if ( html.includes('66885') ) {
-              self.followBtn.setIdle();
-            }
-          });    
-        });
-        messageObserver.observe(document.getElementById('message-drawer'), { subtree: true, characterData: true, childList: true });
         $('#tmf_without_exception').on('change', function() {
           self.withoutException = this.checked;
           if ( this.checked ) {
@@ -59,10 +74,4 @@ Record.get(function() {
   tmf.toggle();
 });
 
-var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    tmf.toggle();
-  });    
-});
-observer.observe(document.querySelector('head > title'), { subtree: true, characterData: true, childList: true });
 */

@@ -1,3 +1,7 @@
+class Profile {
+  
+}
+export default Profile;
 /*
 function Profile(nth) {
   this.$el = $('.ProfileCard:eq(' + nth + ')');

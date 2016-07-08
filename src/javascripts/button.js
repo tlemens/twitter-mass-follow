@@ -1,3 +1,30 @@
+class Button {
+  constructor(element) {
+    this.element = element
+    this.count = count
+    this.titleEl = this.element.getElementsByClassName('tmf-btn__title')[0]
+    this.textEl = this.element.getElementsByClassName('tmf-btn__text')[0]
+  }
+  set title(string) {
+    this.titleEl.innerHTML = string
+  }
+  set text(string) {
+    this.textEl.innerHTML = string
+  }
+  countDown(seconds) {
+    return new Promise((resolve, reject) => {
+      this.countDownInterval = setInterval(() => {
+        this.text(`Continuing in ${seconds} seconds...`)
+        if (0 === seconds) {
+          resolve()
+        } else {
+          seconds--
+        }
+      }, 1000)
+    })
+  }
+}
+export default Button;
 /*
 function Button($el, profileAction, interval) {
   var self = this;
