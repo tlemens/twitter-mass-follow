@@ -1,28 +1,99 @@
 let nth = 0
 
 class Profile {
-  static all() {
-    return CardProfile.all().concat(StreamProfile.all())
-  }
-  static next() {
-    Profile.all()[nth]
-    nth++
-  }
   static present() {
     nth = 0
-    return (Profile.all().length > 8)
+    return (CardProfile.present() || StreamProfile.present())
+  }
+  static next() {
+    let klass = CardProfile.present() ? CardProfile : StreamProfile
+    new klass(klass.all()[nth])
+  }
+  constructor() {
+    if ( this.isLoaded() ) {
+      nth++
+      this.btn = this.element.getElementsByClassName('user-actions-follow-button')[0]
+      this.userId = this.element.dataset.userId
+    }
+  }
+  isLoaded() {
+    return typeof(this.element) === 'object'
+  }
+  isNotFollowing() {
+    return !this.isFollowing();
+  }
+  isFollowable() {
+    return this.btn.getElementsByClassName('follow-text')[0].style.display === 'block'
+  }
+  isFollowed() {
+    return this.btn.getElementsByClassName('following-text')[0].style.display === 'block'
+  }
+  follow() {
+    if ( this.isFollowable() ) {
+      if ( settings.follow.blacklist.includes(this.userId) ) {
+        this.log('warn', 'User is blacklisted');
+      } else if ( settings.follow.withoutException || unfollowed.includes(this.userId) ) {
+        this.clickBtn()
+        this.log('success', 'Successfully followed')
+        return true
+      } else {
+        this.log('warn', 'Already unfollowed once');
+      }
+    }
+    return false
+  }
+  unfollow() {
+    if ( this.isFollowed() ) {
+      if ( settings.unfollow.blacklist.includes(this.userId) ) {
+        this.log('warn', 'User is blacklisted');
+      } else if ( settings.unfollow.withoutException || this.isNotFollowing() )
+        this.clickBtn()
+        this.log('success', 'Successfully unfollowed')
+        unfollowed.add(this.userId)
+        return true
+      }
+    }
+    return false
+  }
+  clickBtn() {
+    this.btn.click()
+  }
+  log(type, text) {
+    let el = document.createElement('div')
+    el.className = `tmf-log tmf-log--${type}`
+    el.innerHTML = text
+    let bioEl = this.getBioElement()
+    bioEl.parentNode.insertBefore(el, bioEl)
   }
 }
 
 class CardProfile extends Profile {
   static all() {
-    return [...document.getElementsByClassName('ProfileCard')]
+    return document.getElementsByClassName('ProfileCard')
+  }
+  static present() {
+    CardProfile.all().length > 8
+  }
+  isFollowing() {
+    return this.element.getElementsByClassName('FollowStatus').length
+  }
+  getBioElement() {
+    return this.element.getElementsByClassName('ProfileCard-bio')[0]
   }
 }
 
 class StreamProfile extends Profile {
   static all() {
-    return [...document.getElementsByClassName('account')]
+    return document.getElementsByClassName('account')
+  }
+  static present() {
+    StreamProfile.all().length > 3
+  }
+  isFollowing() {
+    throw "Not implemented!";
+  }
+  getBioElement() {
+    return this.element.getElementsByClassName('bio')[0]
   }
 }
 

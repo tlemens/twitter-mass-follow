@@ -1,15 +1,14 @@
 import TwitterMassFollow from './twitter_mass_follow.js'
-import Session from './session.js'
+import { observePageAction, observeFollowLimitsMessage } from './page_observer.js'
 
 let extension = new TwitterMassFollow()
 
 extension.load().then(() => {
-  let session = new Session()
-  session.pageChanged(() => {  
+  observePageAction(() => {
     extension.showOrHide()
   })
-  session.limitExceeded(() => {
-    extension.twitterLimitExceeded()
+  observeFollowLimitsMessage(() => {
+    extension.sleep()
   })
 })
   
