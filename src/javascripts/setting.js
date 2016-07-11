@@ -27,7 +27,7 @@ class CheckboxSetting extends Setting {
   }
   set value(newValue) {
     this.element.checked = newValue
-    super(newValue)
+    super.value = newValue
   }
 }
 
@@ -41,7 +41,7 @@ class TextSetting extends Setting {
   }
   set value(newValue) {
     this.element.value = newValue
-    super(newValue)
+    super.value = newValue
   }
 }
 

@@ -4,6 +4,7 @@ import { observePageAction, observeFollowLimitsMessage } from './page_observer.j
 let extension = new TwitterMassFollow()
 
 extension.load().then(() => {
+  extension.showOrHide()
   observePageAction(() => {
     extension.showOrHide()
   })

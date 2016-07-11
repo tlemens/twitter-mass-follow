@@ -1,22 +1,46 @@
-<button class="tmf-btn tmf-btn--follow">
-  <div class="tmf-btn__title">
-    Follow All
-  </div>
-  <div class="tmf-btn__subtitle">
-    who have never been unfollowed
-  </div>
-</button>
-<button class="tmf-btn tmf-btn--unfollow">
-  <div class="tmf-btn__title">
-    Unfollow All
-  </div>
-  <div class="tmf-btn__subtitle">
-    who do not follow you
-  </div>
-</button>
-<div class="tmf__options">
-  <input type="checkbox" class="tmf__without-exception" id="tmf_without_exception"> <label for="tmf_without_exception">without exception</label>
-</div>
-<div class="tmf__note">
-  <strong>NOTE</strong>: Please read about the <a href="https://support.twitter.com/articles/355430" target="_blank">Twitter daily limits</a>.
-</div>
+<header class="tmf__header">
+  <h2><img alt="Twitter Mass Follow" id="tmfLogo"></h2>
+</header>
+<main class="tmf__main">
+  <section class="tmf__section">
+    <h3>Follow</h3>
+    <div class="tmf-content">
+      <button class="tmf-btn tmf-btn--follow">
+        <div class="tmf-btn__title">
+          Follow All
+        </div>
+        <div class="tmf-btn__text">
+          who have never been unfollowed
+        </div>
+      </button>
+      <input type="checkbox" id="followWithoutException"> <label for="followWithoutException">without exception</label>
+      <label for="followWait">Wait (milliseconds)</label>
+      <input type="number" id="followWait" step="500">
+      <p>Wait x milliseconds after each follow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive following</a></p>
+      <label for="followBlacklist">Blacklist</label>
+      <textarea id="followBlacklist" rows="5"></textarea>
+      <p>Comma separated list of handles, which will be skipped while following</p>
+    </div>
+  </section>
+  <section class="tmf__section">
+    <h3>Unfollow</h3>
+    <div class="tmf-content">
+      <button class="tmf-btn tmf-btn--unfollow">
+        <div class="tmf-btn__title">
+          Unfollow All
+        </div>
+        <div class="tmf-btn__text">
+          who do not follow you
+        </div>
+      </button>
+      <input type="checkbox" id="unfollowWithoutException"> <label for="unfollowWithoutException">without exception</label>
+      <label for="unfollowWait">Wait (milliseconds)</label>
+      <input type="number" id="unfollowWait" step="100">
+      <p>Wait x milliseconds after each unfollow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive unfollowing</a></p>
+      <label for="unfollowBlacklist">Blacklist</label>
+      <textarea id="unfollowBlacklist" rows="5"></textarea>
+      <p>Comma separated list of handles, which will be skipped while unfollowing</p>
+    </div>
+  </main>
+</section>
+  

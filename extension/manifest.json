@@ -1,6 +1,6 @@
 {
-  "manifest_version": 2,
-  "name": "Twitter Mass Follow Dev",
+  "manifest_version": 3,
+  "name": "Twitter Mass Follow",
   "version": "2.0",
   "minimum_chrome_version": "41.0.0.0",
   "description": "Auto bulk follow and unfollow on twitter with style",
@@ -15,7 +15,8 @@
     }
   ],
   "web_accessible_resources": [
-    "extension.html"
+    "extension.html",
+    "icon128.png"
   ],
   "icons": {
     "48":   "icon48.png",

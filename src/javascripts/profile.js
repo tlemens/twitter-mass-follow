@@ -72,7 +72,7 @@ class CardProfile extends Profile {
     return document.getElementsByClassName('ProfileCard')
   }
   static present() {
-    CardProfile.all().length > 8
+    return CardProfile.all().length > 8
   }
   isFollowing() {
     return this.element.getElementsByClassName('FollowStatus').length
@@ -87,7 +87,7 @@ class StreamProfile extends Profile {
     return document.getElementsByClassName('account')
   }
   static present() {
-    StreamProfile.all().length > 3
+    return StreamProfile.all().length > 3
   }
   isFollowing() {
     throw "Not implemented!";
