@@ -46,7 +46,7 @@ class Profile {
     if ( this.isFollowed() ) {
       if ( settings.unfollow.blacklist.includes(this.userId) ) {
         this.log('warn', 'User is blacklisted');
-      } else if ( settings.unfollow.withoutException || this.isNotFollowing() )
+      } else if ( settings.unfollow.withoutException || this.isNotFollowing() ) {
         this.clickBtn()
         this.log('success', 'Successfully unfollowed')
         unfollowed.add(this.userId)
