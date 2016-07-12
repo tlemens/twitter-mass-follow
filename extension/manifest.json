@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Twitter Mass Follow",
   "version": "2.0",
   "minimum_chrome_version": "41.0.0.0",
@@ -15,8 +15,7 @@
     }
   ],
   "web_accessible_resources": [
-    "extension.html",
-    "icon128.png"
+    "extension.html"
   ],
   "icons": {
     "48":   "icon48.png",

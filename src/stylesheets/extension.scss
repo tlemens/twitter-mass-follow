@@ -1,73 +1,73 @@
-@keyframes fadeOutLeft {
+$width: 290px;
+$settings-width: 590px;
+
+
+@keyframes flipInY {
   from {
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    animation-timing-function: ease-in;
+  }
+
+  60% {
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
     opacity: 1;
   }
 
+  80% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+  }
+
   to {
-    opacity: 0;
-    transform: translate3d(-100%, 0, 0);
+    transform: perspective(400px);
   }
 }
 
-@keyframes fadeInLeft {
+@keyframes flipOutY {
   from {
-    opacity: 0;
-    transform: translate3d(-100%, 0, 0);
+    transform: perspective(400px);
+  }
+
+  30% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+    opacity: 1;
   }
 
   to {
-    opacity: 1;
-    transform: none;
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    opacity: 0;
   }
 }
 
 .tmf {
-  animation-duration: 0.5s;
+  animation-duration: 1s;
   animation-fill-mode: both;
   animation-timing-function: ease-in-out;
+  backface-visibility: visible !important;
   background-color: white;
+  border-radius: 5px;
   box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2);
   box-sizing: border-box;
-  height: 100%;
-  left: 0;
-  padding: 60px 15px;
+  padding: 15px 30px;
   position: fixed;
-  top: 0;
-  width: 250px;
-  z-index: 999;
+  right: 30px;
+  top: 100px;
+  width: $width;
+  z-index: 3999;
   &--initial {
     display: none;
   }
   &--show {
-    animation-name: fadeInLeft;
+    animation-name: flipInY;
   }
   &--hide {
-    animation-name: fadeOutLeft;
+    animation-name: flipOutY;
   }
-  &__header {
-    background-color: white;
-    border-bottom: 1px solid #e1e8ed;
-    text-align: center;
-  }
-  &__main {
-    position: relative;
-  }
-  &__section {
-    position: absolute;
-    h3 {
-    }
-    &:last-child {
-      .tmf-content {
-        display: none;
-      }
-    }
-  }
-  .tmf-content {
-  }
-}
-
-.tmf-header {
-
 }
 
 .tmf--active .tmf-btn,
@@ -93,7 +93,7 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
   margin: auto;
   margin-bottom: 15px;
-  width: 210px;
+  width: $width - 60px;
   display: block;
   line-height: 1.6;
   text-align: center;
@@ -134,4 +134,24 @@
 }
 .tmf-log--warn {
   color: orangered;
+}
+
+// Settings
+
+#tmf-settings {
+  .modal {
+    left: 50%;
+    margin-left: -$settings-width/2;
+    top: 100px;
+    width: $settings-width;
+    .controls {
+      margin-left: 140px;
+      p {
+        font-size: 12px;
+      }
+    }
+    hr {
+      margin: 20px -12px;
+    }
+  }
 }

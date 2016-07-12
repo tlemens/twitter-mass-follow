@@ -1,46 +1,91 @@
-<header class="tmf__header">
-  <h2><img alt="Twitter Mass Follow" id="tmfLogo"></h2>
-</header>
-<main class="tmf__main">
-  <section class="tmf__section">
-    <h3>Follow</h3>
-    <div class="tmf-content">
-      <button class="tmf-btn tmf-btn--follow">
-        <div class="tmf-btn__title">
-          Follow All
-        </div>
-        <div class="tmf-btn__text">
-          who have never been unfollowed
-        </div>
-      </button>
-      <input type="checkbox" id="followWithoutException"> <label for="followWithoutException">without exception</label>
-      <label for="followWait">Wait (milliseconds)</label>
-      <input type="number" id="followWait" step="500">
-      <p>Wait x milliseconds after each follow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive following</a></p>
-      <label for="followBlacklist">Blacklist</label>
-      <textarea id="followBlacklist" rows="5"></textarea>
-      <p>Comma separated list of handles, which will be skipped while following</p>
+<aside class="tmf tmf--initial" id="tmf">
+  <button class="tmf-btn tmf-btn--follow">
+    <div class="tmf-btn__title">
+      Follow All
     </div>
-  </section>
-  <section class="tmf__section">
-    <h3>Unfollow</h3>
-    <div class="tmf-content">
-      <button class="tmf-btn tmf-btn--unfollow">
-        <div class="tmf-btn__title">
-          Unfollow All
-        </div>
-        <div class="tmf-btn__text">
-          who do not follow you
-        </div>
-      </button>
-      <input type="checkbox" id="unfollowWithoutException"> <label for="unfollowWithoutException">without exception</label>
-      <label for="unfollowWait">Wait (milliseconds)</label>
-      <input type="number" id="unfollowWait" step="100">
-      <p>Wait x milliseconds after each unfollow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive unfollowing</a></p>
-      <label for="unfollowBlacklist">Blacklist</label>
-      <textarea id="unfollowBlacklist" rows="5"></textarea>
-      <p>Comma separated list of handles, which will be skipped while unfollowing</p>
+    <div class="tmf-btn__text">
+      who have never been unfollowed
     </div>
-  </main>
-</section>
-  
+  </button>
+  <button class="tmf-btn tmf-btn--unfollow">
+    <div class="tmf-btn__title">
+      Unfollow All
+    </div>
+    <div class="tmf-btn__text">
+      who do not follow you
+    </div>
+  </button>
+  <a href="javascript:void(0)" class="js-tmf-show-settings">Settings</a>
+</aside>
+<div class="modal-container" id="tmf-settings">
+  <div class="modal">
+    <div class="modal-content clearfix">
+      <div class="modal-header">
+        <h3 class="modal-title">Twitter Mass Follow Settings</h3>
+      </div>
+      <div class="modal-body t1-form form-horizontal">
+        <h3 class="settings-header">Follow</h3>
+        <div class="control-group">
+          <label for="followWait" class="t1-label control-label">Wait (milliseconds)</label>
+          <div class="controls">
+            <input type="number" id="followWait" step="500">
+            <p>Wait x milliseconds after each follow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive following</a></p>
+          </div>
+        </div>  
+        <div class="control-group">
+          <label for="followSkipUnfollowed" class="t1-label control-label">Skip unfollowed</label>
+          <div class="controls">
+            <label class="t1-label checkbox">
+              <input type="checkbox" id="followSkipUnfollowed"> Skip already once unfollowed profiles
+            </label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="followProfileImageRequired" class="t1-label control-label">Profile image required</label>
+          <div class="controls">
+            <label class="t1-label checkbox">
+              <input type="checkbox" id="followProfileImageRequired"> Follow only profiles with a custom profile image
+            </label>
+            <p>Skip profiles with the default profile image (egghead)</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="followBlacklist" class="t1-label control-label">Blacklist</label>
+          <div class="controls">
+            <textarea id="followBlacklist" rows="3"></textarea>
+            <p>Comma separated list of handles, which will be skipped while following</p>
+          </div>
+        </div>
+        <hr>
+        <h3 class="settings-header">Unfollow</h3>
+        <div class="control-group">
+          <label for="unfollowWait" class="t1-label control-label">Wait (milliseconds)</label>
+          <div class="controls">
+            <input type="number" id="unfollowWait" step="100">
+            <p>Wait x milliseconds after each unfollow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive unfollowing</a></p>
+          </div>
+        </div>  
+        <div class="control-group">
+          <label for="unfollowSkipFollower" class="t1-label control-label">Skip follower</label>
+          <div class="controls">
+            <label class="t1-label checkbox">
+              <input type="checkbox" id="unfollowSkipFollower"> Skip profiles who follow you
+            </label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="unfollowBlacklist" class="t1-label control-label">Blacklist</label>
+          <div class="controls">
+            <textarea id="unfollowBlacklist" rows="5"></textarea>
+            <p>Comma separated list of handles, which will be skipped while unfollowing</p>
+          </div>
+        </div>  
+      </div>
+    </div>
+    <button type="button" class="modal-btn modal-close js-tmf-hide-settings">
+      <span class="Icon Icon--close Icon--medium">
+        <span class="visuallyhidden">Schließen</span>
+      </span>
+    </button>
+  </div>
+</div>
