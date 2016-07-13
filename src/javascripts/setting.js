@@ -6,7 +6,6 @@ class Setting extends StorageRecord {
     this.element = document.getElementById(domId)
     this.value = defaultValue
     super.fetch().then((storageValue) => {
-      console.log('storageValue:' + storageValue)
       this.value = storageValue
     })
   }
@@ -15,6 +14,12 @@ class Setting extends StorageRecord {
   }
   get value() {
     return this._value
+  }
+  save() {
+    let controlGroupEl = this.element.closest('.control-group');
+    controlGroupEl.classList.add('tmf-saved')
+    setTimeout(() => { controlGroupEl.classList.remove('tmf-saved') }, 1000)
+    return super.save()
   }
 }
 

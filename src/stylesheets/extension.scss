@@ -150,3 +150,12 @@ $settings-width: 590px;
     }
   }
 }
+
+.tmf-saved {
+  .control-label:before {
+    color: green;
+    content: 'saved';
+    float: left;
+    position: relative;
+  }
+}
