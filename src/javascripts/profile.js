@@ -1,4 +1,5 @@
 let nth = 0
+let attempts = 0
 
 class Profile {
   static present() {
@@ -6,64 +7,95 @@ class Profile {
     return (CardProfile.present() || StreamProfile.present())
   }
   static next() {
-    let klass = CardProfile.present() ? CardProfile : StreamProfile
-    new klass(klass.all()[nth])
+    console.log('Profile.next()')
+    return new Promise((resolve, reject) => {
+      let klass = CardProfile.present() ? CardProfile : StreamProfile
+      let element = klass.all()[nth]
+      console.log('nth:' + nth)
+      if ( element ) {
+        resolve(new klass(element))
+        nth++
+        attempts = 0
+      } else {
+        attempts++
+        reject(attempts)
+      }
+    })
   }
-  constructor() {
-    if ( this.isLoaded() ) {
-      nth++
-      this.btn = this.element.getElementsByClassName('user-actions-follow-button')[0]
-      this.userId = this.element.dataset.userId
-    }
+  static reset() {
+    console.log('Profile.reset()')
+    nth = 0
+    attempts = 0
   }
-  isLoaded() {
-    return typeof(this.element) === 'object'
-  }
-  isNotFollowing() {
-    return !this.isFollowing();
+  constructor(element) {
+    this.element = element
+    this.btn = this.element.getElementsByClassName('user-actions-follow-button')[0]
+    this.recordId = this.element.dataset.userId + '-'
+    console.log(this.toString())
   }
   isFollowable() {
-    return this.btn.getElementsByClassName('follow-text')[0].style.display === 'block'
+    return this.element.getElementsByClassName('user-actions')[0].classList.contains('not-following')
   }
   isFollowed() {
-    return this.btn.getElementsByClassName('following-text')[0].style.display === 'block'
+    return this.element.getElementsByClassName('user-actions')[0].classList.contains('following')
   }
-  follow() {
+  follow(options) {
+    console.log('follow')
+    console.log(options)
     if ( this.isFollowable() ) {
-      if ( settings.follow.blacklist.includes(this.userId) ) {
-        this.log('warn', 'User is blacklisted');
-      } else if ( settings.follow.withoutException || unfollowed.includes(this.userId) ) {
+      if ( options.blacklisted ) {
+        this.log('warn', 'User is blacklisted')
+        return false
+      } else if ( options.skipUnfollowed && options.unfollowed ) {
+        this.log('warn', 'Already unfollowed once');
+        return false
+      } else if ( options.profileImageRequired && this.hasNoProfileImage() ) {
+        this.log('warn', 'No profile image');
+        return false
+      } else {
         this.clickBtn()
         this.log('success', 'Successfully followed')
         return true
-      } else {
-        this.log('warn', 'Already unfollowed once');
       }
+    } else {
+      console.log('not Followable')
+      return false
     }
-    return false
   }
-  unfollow() {
+  unfollow(options) {
+    console.log('unfollow')
+    console.log(options)
     if ( this.isFollowed() ) {
-      if ( settings.unfollow.blacklist.includes(this.userId) ) {
-        this.log('warn', 'User is blacklisted');
-      } else if ( settings.unfollow.withoutException || this.isNotFollowing() ) {
+      if ( options.blacklisted ) {
+        this.log('warn', 'User is blacklisted')
+        return false
+      } else if ( options.skipFollower && this.isFollowing() ) {
+        return false
+      } else {
         this.clickBtn()
         this.log('success', 'Successfully unfollowed')
-        unfollowed.add(this.userId)
         return true
       }
+    } else {
+      return false
     }
-    return false
   }
   clickBtn() {
-    this.btn.click()
+    //this.btn.click()
+    console.log('btnClicked')
   }
   log(type, text) {
     let el = document.createElement('div')
     el.className = `tmf-log tmf-log--${type}`
     el.innerHTML = text
-    let bioEl = this.getBioElement()
+    let bioEl = this.bioEl
     bioEl.parentNode.insertBefore(el, bioEl)
+  }
+  hasNoProfileImage() {
+    return this.element.getElementsByClassName('js-action-profile-avatar')[0].src.includes('default_profile')
+  }
+  toString() {
+    return `${this.constructor.name} ${this.recordId} ${this.username}`
   }
 }
 
@@ -77,8 +109,11 @@ class CardProfile extends Profile {
   isFollowing() {
     return this.element.getElementsByClassName('FollowStatus').length
   }
-  getBioElement() {
+  get bioEl() {
     return this.element.getElementsByClassName('ProfileCard-bio')[0]
+  }
+  get username() {
+    return this.element.getElementsByClassName('ProfileCard-screennameLink')[0].textContent.trim()
   }
 }
 
@@ -90,69 +125,15 @@ class StreamProfile extends Profile {
     return StreamProfile.all().length > 3
   }
   isFollowing() {
-    throw "Not implemented!";
+    // FIXME
+    return false
   }
-  getBioElement() {
+  get bioEl() {
     return this.element.getElementsByClassName('bio')[0]
+  }
+  get username() {
+    return this.element.getElementsByClassName('username')[0].textContent.trim()
   }
 }
 
 export default Profile;
-/*
-function Profile(nth) {
-  this.$el = $('.ProfileCard:eq(' + nth + ')');
-  if ( this.isLoaded() ) {
-    this.$btn = this.$el.find('.user-actions-follow-button');
-    this.id = this.$el.data('user-id') + '-';
-  }
-}
-
-$.extend(Profile.prototype, {
-  isLoaded: function() {
-    return this.$el.isPresent();
-  },
-  isFollowing: function() {
-    return this.$el.find('.FollowStatus').isPresent();
-  },
-  isNotFollowing: function() {
-    return !this.isFollowing();
-  },
-  isFollowable: function() {
-    return this.$btn.children('.follow-text').is(':visible');
-  },
-  isFollowed: function() {
-    return this.$btn.children('.following-text').is(':visible');
-  },
-  follow: function() {
-    if ( this.isFollowable() ) {
-      if ( tmf.withoutException || !Record.includes(this.id) ) {
-        this.click();
-        tmf.followBtn.incrementCount();
-      } else {
-        this.log('warn', 'Already unfollowed once');
-      }
-    }
-  },
-  unfollow: function() {
-    if ( this.isFollowed() ) {
-      if ( tmf.withoutException || this.isNotFollowing() ) {
-        this.click();
-        tmf.unfollowBtn.incrementCount();
-        Record.add(this.id);
-      }
-    }
-  },
-  click: function() {
-    this.log('success', 'Clicked on "' + this.$btn.children(':visible').text().trim() + '"');
-    this.$btn.click();
-    this.clicked = true;
-  },
-  log:  function(type, text) {
-    $('<div>')
-      .addClass('tmf-log')
-      .addClass('tmf-log--' + type)
-      .text(text)
-      .insertBefore(this.$el.find('.ProfileCard-bio'));
-  }
-});
-*/

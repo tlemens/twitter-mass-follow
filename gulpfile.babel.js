@@ -6,14 +6,15 @@ const paths = {
 }
 
 import autoprefixer from 'autoprefixer'
-import babel from 'gulp-babel';
-import browserify from 'browserify';
-import babelify from 'babelify';
+import browserify from 'browserify'
+import buffer from 'vinyl-buffer'
+import babelify from 'babelify'
 import gulp from 'gulp'
 import nano from 'gulp-cssnano'
 import postcss from 'gulp-postcss'
 import sass from 'gulp-sass'
 import source from 'vinyl-source-stream'
+import uglify from 'gulp-uglify'
 
 gulp.task('sass', () => {
   const processors = [autoprefixer({ browsers: ['last 2 versions'] })]
@@ -31,6 +32,17 @@ gulp.task('js', () => {
   .require("./src/javascripts/extension.js", { entry: true })
   .bundle()
   .pipe(source('extension.js'))
+  .pipe(gulp.dest('extension'))
+})
+
+gulp.task('production', () => {
+  browserify()
+  .transform(babelify)
+  .require("./src/javascripts/extension.js", { entry: true })
+  .bundle()
+  .pipe(source('extension.js'))
+  .pipe(buffer())
+  .pipe(uglify())
   .pipe(gulp.dest('extension'))
 })
 

@@ -1,11 +1,12 @@
 import StorageRecord from './storage_record.js'
 
 class Setting extends StorageRecord {
-  constructor(ID, defaultValue) {
-    super(ID)
-    this.element = document.getElementById(ID)
+  constructor(domId, defaultValue) {
+    super(domId)
+    this.element = document.getElementById(domId)
     this.value = defaultValue
-    super.value.then((storageValue) => {
+    super.fetch().then((storageValue) => {
+      console.log('storageValue:' + storageValue)
       this.value = storageValue
     })
   }
@@ -18,8 +19,8 @@ class Setting extends StorageRecord {
 }
 
 class CheckboxSetting extends Setting {
-  constructor(ID, defaultValue) {
-    super(ID, defaultValue)
+  constructor(domId, defaultValue) {
+    super(domId, defaultValue)
     this.element.addEventListener("change", () => {
       this._value = this.element.checked
       super.save()
@@ -29,11 +30,14 @@ class CheckboxSetting extends Setting {
     this.element.checked = newValue
     super.value = newValue
   }
+  get value() {
+    return super.value
+  }
 }
 
 class TextSetting extends Setting {
-  constructor(ID, defaultValue) {
-    super(ID, defaultValue)
+  constructor(domId, defaultValue) {
+    super(domId, defaultValue)
     this.element.addEventListener("input", () => {
       this._value = this.element.value
       super.save()
@@ -42,6 +46,9 @@ class TextSetting extends Setting {
   set value(newValue) {
     this.element.value = newValue
     super.value = newValue
+  }
+  get value() {
+    return super.value
   }
 }
 

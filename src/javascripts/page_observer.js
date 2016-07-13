@@ -1,7 +1,7 @@
 function observe(element, callback) {
   let observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      callback.call()
+      callback.call(element, mutation)
     })
   })
   observer.observe(element, { subtree: true, characterData: true, childList: true })
@@ -10,11 +10,17 @@ function observe(element, callback) {
 function observeTweetReactions(callback) {
   let element = document.getElementById('activity-popup-dialog')
   let contentEl = element.getElementsByClassName('activity-content')[0]
-  observe(element, function() {
-    if ( element.style.display != 'block' ) {
-      contentEl.innerHTML = ''
+  let initial = true
+  observe(element, function(mutation) {
+    if ( element.getElementsByClassName('account').length && initial ) {
+      initial = false
+      callback.call()
     }
-    callback.call()
+    if ( element.style.display !== 'block' ) {
+      contentEl.innerHTML = ''
+      initial = true
+      callback.call()
+    }
   })
 }
 
