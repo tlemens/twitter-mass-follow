@@ -135,6 +135,10 @@ class TwitterMassFollow {
   }
   _run() {
     console.log('extension._run()')
+    if ( this.unfollowed.isNotReady() ) {
+      this._sleep(500)
+      return false
+    }
     if ( this.paused || this.waiting ) {
       return false
     }

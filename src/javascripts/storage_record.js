@@ -7,6 +7,7 @@ class StorageRecord {
   fetch() {
     return new Promise((resolve, reject) => {
       storage.get(this.key, (result) => {
+        this.fetched = true
         if ( result.hasOwnProperty(this.key) ) {
           resolve(result[this.key])
         }

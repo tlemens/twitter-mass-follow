@@ -4,10 +4,8 @@ class Unfollowed extends StorageRecord {
   constructor(userId) {
     super(userId)
     this._value = ''
-    console.log('unfollowed')
     super.fetch().then((storageValue) => {
       this._value = storageValue
-      console.log('storageValue:' + storageValue)
     })
   }
   includes(recordId) {
@@ -16,6 +14,9 @@ class Unfollowed extends StorageRecord {
   add(recordId) {
     this._value += recordId
     super.save()
+  }
+  isNotReady() {
+    return typeof(this.fetched) === 'undefined'
   }
 }
 
