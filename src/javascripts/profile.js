@@ -81,8 +81,8 @@ class Profile {
     }
   }
   clickBtn() {
-    //this.btn.click()
-    console.log('btnClicked')
+    this.btn.click()
+    console.log('profile.btnClicked')
   }
   log(type, text) {
     let el = document.createElement('div')

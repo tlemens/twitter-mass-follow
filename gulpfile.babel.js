@@ -42,7 +42,7 @@ gulp.task('production', () => {
   .bundle()
   .pipe(source('extension.js'))
   .pipe(buffer())
-  .pipe(uglify())
+  .pipe(uglify({ compress: { drop_console: true }}))
   .pipe(gulp.dest('extension'))
 })
 

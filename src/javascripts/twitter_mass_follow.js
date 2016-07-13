@@ -101,7 +101,6 @@ class TwitterMassFollow {
         let btnEl = this.element.getElementsByClassName(`tmf-btn--${mode}`)[0]
         let btn = new Button(btnEl)
         btnEl.addEventListener('click', () => {
-          console.log('btn clicked')
           if ( this.waiting ) {
             return false
           }
@@ -135,14 +134,13 @@ class TwitterMassFollow {
     setTimeout(() => { this._run() }, parseInt(milliseconds))
   }
   _run() {
-    console.log('_run()')
+    console.log('extension._run()')
     if ( this.paused || this.waiting ) {
       return false
     }
     Profile.next()
       .then((profile) => {
         this.currentProfile = profile
-        console.log(this.mode)
         let options
         switch (this.mode) {
           case 'follow':
