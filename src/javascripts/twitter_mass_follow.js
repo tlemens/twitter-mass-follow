@@ -145,6 +145,7 @@ class TwitterMassFollow {
           this.activeBtn = btn
           this.mode = mode
           this.element.classList.add(`tmf--${mode}`)
+          this.blacklist = this._setting(`${mode}Blacklist`).split(',')
           btn.text = 'Click to pause'
           this._run()
         }
@@ -154,7 +155,7 @@ class TwitterMassFollow {
   }
   _followProfile(profile) {
     let options = {
-      blacklisted: this._setting('followBlacklist').includes(profile.username),
+      blacklisted: this.blacklist.includes(profile.username),
       skipUnfollowed: this._setting('followSkipUnfollowed'),
       unfollowed: this.unfollowed.includes(profile.recordId),
       profileImageRequired: this._setting('followProfileImageRequired')
@@ -169,7 +170,7 @@ class TwitterMassFollow {
   }
   _unfollowProfile(profile) {
     let options = {
-      blacklisted: this._setting('unfollowBlacklist').includes(profile.username),
+      blacklisted: this.blacklist.includes(profile.username),
       skipFollower: this._setting('unfollowSkipFollower')
     }
     if ( profile.unfollow(options) ) {
