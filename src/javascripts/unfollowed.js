@@ -11,13 +11,13 @@ class Unfollowed {
           this.value = storageValue
           resolve()
         }, () => {
-          this.value = ''
+          this.value = '-'
           resolve()
         })
     })
   }
   includes(recordId) {
-    return this.value.includes(recordId)
+    return this.value.includes(`-${recordId}`)
   }
   add(recordId) {
     this.value += recordId
