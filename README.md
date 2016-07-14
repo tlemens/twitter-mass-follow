@@ -4,10 +4,6 @@ Auto bulk follow and unfollow on twitter with style.
 
 ![Twitter Mass Follow](https://github.com/tlemens/twitter-mass-follow/blob/master/extension/icon128.png)
 
-## New version coming soon
-
-The master branch is where we are working on 2.0. Please check the [releases](https://github.com/tlemens/twitter-mass-follow/releases) for a working version.
-
 ## Usage
 
 1. Add [Chrome extension](https://chrome.google.com/webstore/detail/twitter-mass-follow/lfmanfkmmgfigbnjibfemdnnfjboficn) 
