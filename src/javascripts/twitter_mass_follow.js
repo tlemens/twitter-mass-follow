@@ -42,7 +42,10 @@ class TwitterMassFollow {
   }
   set error(newError) {
     this.element.getElementsByClassName('tmf__error')[0].innerHTML = newError
+    this.element.classList.remove('tmf--initial')
+    this.element.classList.remove('tmf--hide')
     this.element.classList.add('tmf--error')
+    this.element.classList.add('tmf--show')
   }
   hide() {
     this.element.classList.remove('tmf--show')
@@ -107,11 +110,13 @@ class TwitterMassFollow {
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'extensionWait', 1)
-    for (let el of document.getElementsByClassName('tmf-show-settings')) {
-      el.addEventListener('click', () => { this._showSettings() })
+    let showElements = document.getElementsByClassName('tmf-show-settings')
+    for (let i=0; i<showElements.length; i++) {
+      showElements[i].addEventListener('click', () => { this._showSettings() })
     }
-    for (let el of document.getElementsByClassName('tmf-hide-settings')) {
-      el.addEventListener('click', () => { this._hideSettings() })
+    let hideElements = document.getElementsByClassName('tmf-hide-settings')
+    for (let i=0; i<hideElements.length; i++) {
+      hideElements[i].addEventListener('click', () => { this._hideSettings() })
     }
     document.onkeydown = (e) => {
       if (e.key === 'Escape') {
