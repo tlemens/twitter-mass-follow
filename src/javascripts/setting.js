@@ -1,25 +1,24 @@
 import StorageRecord from './storage_record.js'
 
-class Setting extends StorageRecord {
+class Setting {
   constructor(domId, defaultValue) {
-    super(domId)
     this.element = document.getElementById(domId)
-    this.value = defaultValue
-    super.fetch().then((storageValue) => {
-      this.value = storageValue
-    })
-  }
-  set value(newValue) {
-    this._value = newValue
-  }
-  get value() {
-    return this._value
+    this.storage = new StorageRecord(domId)
+    this.storage.fetch()
+      .then((storageValue) => {
+        this.value = storageValue
+      }, () => {
+        this.value = defaultValue
+      })
   }
   save() {
+    this._animateSaved()
+    return this.storage.save(this._value)
+  }
+  _showSavedNotification() {
     let controlGroupEl = this.element.closest('.control-group');
     controlGroupEl.classList.add('tmf-saved')
     setTimeout(() => { controlGroupEl.classList.remove('tmf-saved') }, 1000)
-    return super.save()
   }
 }
 
@@ -33,10 +32,7 @@ class CheckboxSetting extends Setting {
   }
   set value(newValue) {
     this.element.checked = newValue
-    super.value = newValue
-  }
-  get value() {
-    return super.value
+    this._value = newValue
   }
 }
 
@@ -50,10 +46,7 @@ class TextSetting extends Setting {
   }
   set value(newValue) {
     this.element.value = newValue
-    super.value = newValue
-  }
-  get value() {
-    return super.value
+    this._value = newValue
   }
 }
 

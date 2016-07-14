@@ -1,22 +1,23 @@
 import StorageRecord from './storage_record.js'
 
-class Unfollowed extends StorageRecord {
+class Unfollowed {
   constructor(userId) {
-    super(userId)
-    this._value = ''
-    super.fetch().then((storageValue) => {
-      this._value = storageValue
+    this.storage = new StorageRecord(userId)
+  }
+  load() {
+    return new Promise((resolve, reject) => {
+      this.storage.fetch().then((storageValue) => {
+        this.value = storageValue
+        resolve()
+      }, resolve)
     })
   }
   includes(recordId) {
-    return this._value.includes(recordId)
+    return this.value.includes(recordId)
   }
   add(recordId) {
-    this._value += recordId
-    super.save()
-  }
-  isNotReady() {
-    return typeof(this.fetched) === 'undefined'
+    this.value += recordId
+    this.storage.save(this.value)
   }
 }
 

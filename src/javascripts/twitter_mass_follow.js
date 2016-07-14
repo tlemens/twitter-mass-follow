@@ -29,24 +29,24 @@ class TwitterMassFollow {
     }
   }
   show() {
-    if ( this._init() ) {
+    this._init().then(() => {
       this.element.classList.remove('tmf--initial')
       this.element.classList.remove('tmf--hide')
       this.element.classList.remove('tmf--follow')
       this.element.classList.remove('tmf--unfollow')
       this.element.classList.add('tmf--show')
-    } 
+    })
   }
   hide() {
     this.element.classList.remove('tmf--show')
     this.element.classList.add('tmf--hide')
   }
-  showSettings() {
+  _showSettings() {
     this.settingsEl.style.display = 'block'
     this.modalOverlayEl.style.display = 'block'
     this.element.style.zIndex = 3999
   }
-  hideSettings() {
+  _hideSettings() {
     this.settingsEl.style.display = 'none'
     this.modalOverlayEl.style.display = 'none'
     this.element.style.zIndex = 9999
@@ -60,74 +60,115 @@ class TwitterMassFollow {
       this._run()
     })
   }
+  _reset() {
+    this.activeBtn = undefined
+    this.mode = undefined
+    this.followBtn.title = 'Follow All'
+    this.followBtn.text = ''
+    this.unfollowBtn.title = 'Unfollow All'
+    this.unfollowBtn.text = ''
+    Profile.reset()
+    return true;
+  }
   _init() {
-    this.count = 0
-    this.waiting = false
-    this.paused = false
-    if (this.userId) {
-      // Reset
-      this.activeBtn = undefined
-      this.mode = undefined
-      this.followBtn.title = 'Follow All'
-      this.followBtn.text = ''
-      this.unfollowBtn.title = 'Unfollow All'
-      this.unfollowBtn.text = ''
-      Profile.reset()
-      return true;
-    }
-    try {
-      this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId.toString()
-      this.unfollowed = new Unfollowed(this.userId)
-      this._addSetting(TextSetting, 'followWait', 1000)
-      this._addSetting(CheckboxSetting, 'followSkipUnfollowed', true)
-      this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
-      this._addSetting(TextSetting, 'followBlacklist', '@username1,@username2')
-      this._addSetting(TextSetting, 'unfollowWait', 100)
-      this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
-      this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
-      this._addSetting(TextSetting, 'extensionWait', 1)
-      for (let el of document.getElementsByClassName('js-tmf-show-settings')) {
-        el.addEventListener('click', () => { this.showSettings() })
-      }
-      for (let el of document.getElementsByClassName('js-tmf-hide-settings')) {
-        el.addEventListener('click', () => { this.hideSettings() })
-      }
-      document.onkeydown = (e) => {
-        if (e.key === 'Escape') {
-          this.hideSettings()
+    return new Promise((resolve, reject) => {
+      this.count = 0
+      this.paused = false
+      this.waiting = false
+      if (this.userId) {
+        // Reset
+        this._reset()
+        resolve()
+      } else {
+        try {
+          this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId.toString()
+          this._setButtons()
+          this.unfollowed = new Unfollowed(this.userId)
+          this.unfollowed.load().then(() => { resolve() })
+        }
+        catch(err) {
+          console.log(err)
+          reject(err)
         }
       }
-      ['follow', 'unfollow'].forEach((mode) => {
-        let btnEl = this.element.getElementsByClassName(`tmf-btn--${mode}`)[0]
-        let btn = new Button(btnEl)
-        btnEl.addEventListener('click', () => {
-          if ( this.waiting ) {
-            return false
-          }
-          if ( this.activeBtn ) {
-            if ( this.paused ) {
-              this.paused = false
-              this._run()
-              btn.text = 'Click to pause'
-            } else {
-              this.paused = true
-              btn.text = 'Click to continue'
-            }
-          } else {
-            this.activeBtn = btn
-            this.mode = mode
-            this.element.classList.add(`tmf--${mode}`)
-            btn.text = 'Click to pause'
-            this._run()
-          }
-        })
-        this[`${mode}Btn`] = btn
-      })
-      return true;
+    })
+  }
+  _addSettings() {
+    this._addSetting(TextSetting, 'followWait', 1000)
+    this._addSetting(CheckboxSetting, 'followSkipUnfollowed', true)
+    this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
+    this._addSetting(TextSetting, 'followBlacklist', '@username1,@username2')
+    this._addSetting(TextSetting, 'unfollowWait', 100)
+    this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
+    this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
+    this._addSetting(TextSetting, 'extensionWait', 1)
+    for (let el of document.getElementsByClassName('js-tmf-show-settings')) {
+      el.addEventListener('click', () => { this._showSettings() })
     }
-    catch(err) {
-      console.log(err)
-      return false;
+    for (let el of document.getElementsByClassName('js-tmf-hide-settings')) {
+      el.addEventListener('click', () => { this._hideSettings() })
+    }
+    document.onkeydown = (e) => {
+      if (e.key === 'Escape') {
+        this.hideSettings()
+      }
+    }
+  }
+  _setButtons() {
+    ['follow', 'unfollow'].forEach((mode) => {
+      let btnEl = this.element.getElementsByClassName(`tmf-btn--${mode}`)[0]
+      let btn = new Button(btnEl)
+      btnEl.addEventListener('click', () => {
+        if ( this.waiting ) {
+          return false
+        }
+        if ( this.activeBtn ) {
+          if ( this.paused ) {
+            this.paused = false
+            this._run()
+            btn.text = 'Click to pause'
+          } else {
+            this.paused = true
+            btn.text = 'Click to continue'
+          }
+        } else {
+          this.activeBtn = btn
+          this.mode = mode
+          this.element.classList.add(`tmf--${mode}`)
+          btn.text = 'Click to pause'
+          this._run()
+        }
+      })
+      this[`${mode}Btn`] = btn
+    })
+  }
+  _followProfile(profile) {
+    let options = {
+      blacklisted: this.settings.followBlacklist.value.includes(profile.username),
+      skipUnfollowed: this.settings.followSkipUnfollowed.value,
+      unfollowed: this.unfollowed.includes(profile.recordId),
+      profileImageRequired: this.settings.followProfileImageRequired.value
+    }
+    if ( profile.follow(options) ) {
+      this.count++
+      this.activeBtn.title = this.count
+      this._sleep(this.settings.followWait.value)
+    } else {
+      this._run()
+    }
+  }
+  _unfollowProfile(profile) {
+    let options = {
+      blacklisted: this.settings.unfollowBlacklist.value.includes(profile.username),
+      skipFollower: this.settings.unfollowSkipFollower.value
+    }
+    if ( profile.unfollow(options) ) {
+      this.unfollowed.add(profile.recordId)
+      this.count++
+      this.activeBtn.title = this.count
+      this._sleep(this.settings.unfollowWait.value)
+    } else {
+      this._run()
     }
   }
   _sleep(milliseconds) {
@@ -135,46 +176,18 @@ class TwitterMassFollow {
   }
   _run() {
     console.log('extension._run()')
-    if ( this.unfollowed.isNotReady() ) {
-      this._sleep(500)
-      return false
-    }
     if ( this.paused || this.waiting ) {
       return false
     }
     Profile.next()
       .then((profile) => {
         this.currentProfile = profile
-        let options
         switch (this.mode) {
           case 'follow':
-            options = {
-              blacklisted: this.settings.followBlacklist.value.includes(profile.username),
-              skipUnfollowed: this.settings.followSkipUnfollowed.value,
-              unfollowed: this.unfollowed.includes(profile.recordId),
-              profileImageRequired: this.settings.followProfileImageRequired.value
-            }
-            if ( profile.follow(options) ) {
-              this.count++
-              this.activeBtn.title = this.count
-              this._sleep(this.settings.followWait.value)
-            } else {
-              this._run()
-            }
+            this._followProfile(profile)
           break
           case 'unfollow':
-            options = {
-              blacklisted: this.settings.unfollowBlacklist.value.includes(profile.username),
-              skipFollower: this.settings.unfollowSkipFollower.value
-            }
-            if ( profile.unfollow(options) ) {
-              this.unfollowed.add(profile.recordId)
-              this.count++
-              this.activeBtn.title = this.count
-              this._sleep(this.settings.unfollowWait.value)
-            } else {
-              this._run()
-            }
+            this._unfollowProfile(profile)
           break
         }
       }, (attempts) => {

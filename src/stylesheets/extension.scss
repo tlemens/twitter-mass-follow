@@ -134,6 +134,7 @@ $settings-width: 590px;
 // Settings
 
 #tmf-settings {
+  display: none;
   .modal {
     left: 50%;
     margin-left: -$settings-width/2;
