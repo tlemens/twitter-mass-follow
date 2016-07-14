@@ -7,11 +7,9 @@ class Profile {
     return (CardProfile.present() || StreamProfile.present())
   }
   static next() {
-    console.log('Profile.next()')
     return new Promise((resolve, reject) => {
       let klass = CardProfile.present() ? CardProfile : StreamProfile
       let element = klass.all()[nth]
-      console.log('nth:' + nth)
       if ( element ) {
         resolve(new klass(element))
         nth++
@@ -23,7 +21,6 @@ class Profile {
     })
   }
   static reset() {
-    console.log('Profile.reset()')
     nth = 0
     attempts = 0
   }
@@ -40,8 +37,6 @@ class Profile {
     return this.element.getElementsByClassName('user-actions')[0].classList.contains('following')
   }
   follow(options) {
-    console.log('follow')
-    console.log(options)
     if ( this.isFollowable() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
@@ -58,13 +53,10 @@ class Profile {
         return true
       }
     } else {
-      console.log('not Followable')
       return false
     }
   }
   unfollow(options) {
-    console.log('unfollow')
-    console.log(options)
     if ( this.isFollowed() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
@@ -82,7 +74,6 @@ class Profile {
   }
   clickBtn() {
     this.btn.click()
-    console.log('profile.btnClicked')
   }
   log(type, text) {
     let el = document.createElement('div')

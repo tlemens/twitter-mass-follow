@@ -85,10 +85,29 @@ $settings-width: 590px;
   }
   &--follow,
   &--unfollow {
-    .tmf__link {
+    .tmf-show-settings {
       display: none;
     }
   }
+  &__error {
+    color: orangered;
+    display: none;
+  }
+  &--error { 
+    .tmf__error {
+      display: block;
+    }
+    .tmf-btn,
+    .tmf-show-settings {
+      display: none;
+    }
+  }
+}
+
+.tmf-show-settings {
+  color: #0084B4;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .tmf-btn {
@@ -152,10 +171,10 @@ $settings-width: 590px;
   }
 }
 
-.tmf-saved {
+.tmf-setting-success {
   .control-label:before {
     color: green;
-    content: 'saved';
+    content: attr(data-success-message);
     float: left;
     position: relative;
   }

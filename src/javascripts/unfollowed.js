@@ -6,10 +6,14 @@ class Unfollowed {
   }
   load() {
     return new Promise((resolve, reject) => {
-      this.storage.fetch().then((storageValue) => {
-        this.value = storageValue
-        resolve()
-      }, resolve)
+      this.storage.fetch()
+        .then((storageValue) => {
+          this.value = storageValue
+          resolve()
+        }, () => {
+          this.value = ''
+          resolve()
+        })
     })
   }
   includes(recordId) {

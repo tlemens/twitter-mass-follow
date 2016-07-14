@@ -21,7 +21,6 @@ class TwitterMassFollow {
     })
   }
   showOrHide() {
-    console.log('extension.showOrHide()')
     if ( Profile.present() ) {
       this.show()
     } else {
@@ -29,13 +28,21 @@ class TwitterMassFollow {
     }
   }
   show() {
-    this._init().then(() => {
-      this.element.classList.remove('tmf--initial')
-      this.element.classList.remove('tmf--hide')
-      this.element.classList.remove('tmf--follow')
-      this.element.classList.remove('tmf--unfollow')
-      this.element.classList.add('tmf--show')
-    })
+    this._init()
+      .then(() => {
+        this.element.classList.remove('tmf--initial')
+        this.element.classList.remove('tmf--hide')
+        this.element.classList.remove('tmf--follow')
+        this.element.classList.remove('tmf--unfollow')
+        this.element.classList.remove('tmf--error')
+        this.element.classList.add('tmf--show')
+      }, (errorMessage) => {     
+        this.error = errorMessage
+      })
+  }
+  set error(newError) {
+    this.element.getElementsByClassName('tmf__error')[0].innerHTML = newError
+    this.element.classList.add('tmf--error')
   }
   hide() {
     this.element.classList.remove('tmf--show')
@@ -52,9 +59,8 @@ class TwitterMassFollow {
     this.element.style.zIndex = 9999
   }
   wait() {
-    console.log("extension.wait()")
     this.waiting = true
-    this.activeBtn.countDown(this.settings.extensionWait.value).then(() => { 
+    this.activeBtn.countDown(this._setting('extensionWait')).then(() => { 
       this.waiting = false
       this.activeBtn.text = 'Click to pause'
       this._run()
@@ -76,18 +82,17 @@ class TwitterMassFollow {
       this.paused = false
       this.waiting = false
       if (this.userId) {
-        // Reset
         this._reset()
         resolve()
       } else {
         try {
           this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId.toString()
           this._setButtons()
+          this._addSettings()
           this.unfollowed = new Unfollowed(this.userId)
           this.unfollowed.load().then(() => { resolve() })
         }
         catch(err) {
-          console.log(err)
           reject(err)
         }
       }
@@ -102,15 +107,15 @@ class TwitterMassFollow {
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'extensionWait', 1)
-    for (let el of document.getElementsByClassName('js-tmf-show-settings')) {
+    for (let el of document.getElementsByClassName('tmf-show-settings')) {
       el.addEventListener('click', () => { this._showSettings() })
     }
-    for (let el of document.getElementsByClassName('js-tmf-hide-settings')) {
+    for (let el of document.getElementsByClassName('tmf-hide-settings')) {
       el.addEventListener('click', () => { this._hideSettings() })
     }
     document.onkeydown = (e) => {
       if (e.key === 'Escape') {
-        this.hideSettings()
+        this._hideSettings()
       }
     }
   }
@@ -144,29 +149,29 @@ class TwitterMassFollow {
   }
   _followProfile(profile) {
     let options = {
-      blacklisted: this.settings.followBlacklist.value.includes(profile.username),
-      skipUnfollowed: this.settings.followSkipUnfollowed.value,
+      blacklisted: this._setting('followBlacklist').includes(profile.username),
+      skipUnfollowed: this._setting('followSkipUnfollowed'),
       unfollowed: this.unfollowed.includes(profile.recordId),
-      profileImageRequired: this.settings.followProfileImageRequired.value
+      profileImageRequired: this._setting('followProfileImageRequired')
     }
     if ( profile.follow(options) ) {
       this.count++
       this.activeBtn.title = this.count
-      this._sleep(this.settings.followWait.value)
+      this._sleep(this._setting('followWait'))
     } else {
       this._run()
     }
   }
   _unfollowProfile(profile) {
     let options = {
-      blacklisted: this.settings.unfollowBlacklist.value.includes(profile.username),
-      skipFollower: this.settings.unfollowSkipFollower.value
+      blacklisted: this._setting('unfollowBlacklist').includes(profile.username),
+      skipFollower: this._setting('unfollowSkipFollower')
     }
     if ( profile.unfollow(options) ) {
       this.unfollowed.add(profile.recordId)
       this.count++
       this.activeBtn.title = this.count
-      this._sleep(this.settings.unfollowWait.value)
+      this._sleep(this._setting('unfollowWait'))
     } else {
       this._run()
     }
@@ -175,7 +180,6 @@ class TwitterMassFollow {
     setTimeout(() => { this._run() }, parseInt(milliseconds))
   }
   _run() {
-    console.log('extension._run()')
     if ( this.paused || this.waiting ) {
       return false
     }
@@ -191,7 +195,6 @@ class TwitterMassFollow {
           break
         }
       }, (attempts) => {
-        console.log('attempts: ' + attempts)
         if ( attempts > 10 ) {
           this.activeBtn.text = 'No more profiles found'
           this.paused = true
@@ -203,6 +206,9 @@ class TwitterMassFollow {
   }
   _addSetting(klass, ID, defaultValue) {
     this.settings[ID] = new klass(ID, defaultValue)
+  }
+  _setting(ID) {
+    return this.settings[ID]._value
   }
 }
 
