@@ -97,7 +97,7 @@ class Profile {
     }
   }
   clickBtn() {
-    //this.btn.click()
+    this.btn.click()
   }
   log(type, text) {
     let el = document.createElement('div')
