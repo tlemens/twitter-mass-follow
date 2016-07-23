@@ -1,3 +1,5 @@
+import get from './xhttp_helper.js'
+
 let nth = 0
 let attempts = 0
 
@@ -11,9 +13,21 @@ class Profile {
       let klass = CardProfile.present() ? CardProfile : StreamProfile
       let element = klass.all()[nth]
       if ( element ) {
-        resolve(new klass(element))
-        nth++
-        attempts = 0
+        let profile = new klass(element)
+        if ( profile.isMyProfile() ) {
+          nth++
+          reject(attempts)
+        } else if ( profile.isStream() ) {
+          profile.setIsFollowing().then(() => {
+            resolve(profile)
+            nth++
+            attempts = 0
+          })
+        } else {
+          resolve(profile)
+          nth++
+          attempts = 0
+        }
       } else {
         attempts++
         reject(attempts)
@@ -27,8 +41,12 @@ class Profile {
   constructor(element) {
     this.element = element
     this.btn = this.element.getElementsByClassName('user-actions-follow-button')[0]
-    this.recordId = this.element.dataset.userId + '-'
+    this.userId = this.element.dataset.userId
+    this.recordId = this.userId + '-'
     console.log(this.toString())
+  }
+  isMyProfile() {
+    return this.btn === undefined
   }
   isFollowable() {
     return this.element.getElementsByClassName('user-actions')[0].classList.contains('not-following')
@@ -49,6 +67,9 @@ class Profile {
         return false
       } else if ( options.skipProtected && this.isProtected() ) {
         this.log('warn', 'Protected profile');
+        return false
+      } else if ( options.skipFollower && this.isFollowing() ) {
+        this.log('warn', 'Allready following')
         return false
       } else {
         this.clickBtn()
@@ -76,7 +97,7 @@ class Profile {
     }
   }
   clickBtn() {
-    this.btn.click()
+    //this.btn.click()
   }
   log(type, text) {
     let el = document.createElement('div')
@@ -103,8 +124,11 @@ class CardProfile extends Profile {
   static present() {
     return CardProfile.all().length > 8
   }
+  isStream() {
+    return false
+  }
   isFollowing() {
-    return this.element.getElementsByClassName('FollowStatus').length
+    return this.element.getElementsByClassName('FollowStatus').length > 0
   }
   get bioEl() {
     return this.element.getElementsByClassName('ProfileCard-bio')[0]
@@ -121,9 +145,23 @@ class StreamProfile extends Profile {
   static present() {
     return StreamProfile.all().length > 3
   }
+  isStream() {
+    return true
+  }
+  setIsFollowing() {
+    return new Promise((resolve, reject) => {
+      get(`https://twitter.com/i/profiles/popup?user_id=${this.userId}&wants_hovercard=true`)
+        .then((responseText) => {
+          this._isFollowing = responseText.includes('FollowStatus')
+          resolve()
+        }, (statusText) => {
+          this._isFollowing = false
+          resolve()
+        })
+    })
+  }
   isFollowing() {
-    // FIXME
-    return false
+    return this._isFollowing
   }
   get bioEl() {
     return this.element.getElementsByClassName('bio')[0]

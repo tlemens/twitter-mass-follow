@@ -25,7 +25,7 @@
         <div class="control-group">
           <label for="followWait" class="t1-label control-label">Wait (milliseconds)</label>
           <div class="controls">
-            <input type="number" id="followWait" step="500">
+            <input type="number" id="followWait" step="100">
             <p>Wait x milliseconds after each follow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive following</a></p>
           </div>
         </div>  
@@ -51,6 +51,14 @@
           <div class="controls">
             <label class="t1-label checkbox">
               <input type="checkbox" id="followSkipProtected"> Skip protected  profiles <span class="Icon Icon--protected"></span>
+            </label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="followSkipFollower" class="t1-label control-label">Skip follower</label>
+          <div class="controls">
+            <label class="t1-label checkbox">
+              <input type="checkbox" id="followSkipFollower"> Skip profiles who allready follow you
             </label>
           </div>
         </div>
