@@ -47,6 +47,9 @@ class Profile {
       } else if ( options.profileImageRequired && this.hasNoProfileImage() ) {
         this.log('warn', 'No profile image');
         return false
+      } else if ( options.skipProtected && this.isProtected() ) {
+        this.log('warn', 'Protected profile');
+        return false
       } else {
         this.clickBtn()
         this.log('success', 'Successfully followed')
@@ -84,6 +87,9 @@ class Profile {
   }
   hasNoProfileImage() {
     return this.element.getElementsByClassName('js-action-profile-avatar')[0].src.includes('default_profile')
+  }
+  isProtected() {
+    return this.element.getElementsByClassName('Icon--protected').length > 0
   }
   toString() {
     return `${this.constructor.name} ${this.recordId} ${this.username}`

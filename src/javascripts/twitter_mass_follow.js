@@ -91,7 +91,7 @@ class TwitterMassFollow {
         try {
           this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId.toString()
           this._setButtons()
-          this._addSettings()
+          this._initSettings()
           this.unfollowed = new Unfollowed(this.userId)
           this.unfollowed.load().then(() => { resolve() })
         }
@@ -101,10 +101,11 @@ class TwitterMassFollow {
       }
     })
   }
-  _addSettings() {
+  _initSettings() {
     this._addSetting(TextSetting, 'followWait', 1000)
     this._addSetting(CheckboxSetting, 'followSkipUnfollowed', true)
     this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
+    this._addSetting(CheckboxSetting, 'followSkipProtected', false)
     this._addSetting(TextSetting, 'followBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'unfollowWait', 100)
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
@@ -157,6 +158,7 @@ class TwitterMassFollow {
     let options = {
       blacklisted: this.blacklist.includes(profile.username),
       skipUnfollowed: this._setting('followSkipUnfollowed'),
+      skipProtected: this._setting('followSkipProtected'),
       unfollowed: this.unfollowed.includes(profile.recordId),
       profileImageRequired: this._setting('followProfileImageRequired')
     }
