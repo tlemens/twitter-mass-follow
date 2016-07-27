@@ -30,6 +30,13 @@
           </div>
         </div>  
         <div class="control-group">
+          <label for="followLimit" class="t1-label control-label">Limit</label>
+          <div class="controls">
+            <input type="number" id="followLimit" step="1">
+            <p>The extension will stop following when the limit (successfully followed profiles) is reached. Leave this field empty to set no limit.</p>
+          </div>
+        </div>  
+        <div class="control-group">
           <label for="followSkipUnfollowed" class="t1-label control-label">Skip unfollowed</label>
           <div class="controls">
             <label class="t1-label checkbox">
@@ -76,6 +83,13 @@
           <div class="controls">
             <input type="number" id="unfollowWait" step="100">
             <p>Wait x milliseconds after each unfollow to prevent <a href="https://support.twitter.com/articles/355430" target="_blank">aggressive unfollowing</a></p>
+          </div>
+        </div>  
+        <div class="control-group">
+          <label for="unfollowLimit" class="t1-label control-label">Limit</label>
+          <div class="controls">
+            <input type="number" id="unfollowLimit" step="1">
+            <p>The extension will stop unfollowing when the limit (successfully unfollowed profiles) is reached. Leave this field empty to set no limit.</p>
           </div>
         </div>  
         <div class="control-group">
