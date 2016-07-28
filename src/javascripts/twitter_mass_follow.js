@@ -72,10 +72,10 @@ class TwitterMassFollow {
   _reset() {
     this.activeBtn = undefined
     this.mode = undefined
+    this.followBtn.reset()
     this.followBtn.title = 'Follow All'
-    this.followBtn.text = ''
+    this.unfollowBtn.reset()
     this.unfollowBtn.title = 'Unfollow All'
-    this.unfollowBtn.text = ''
     Profile.reset()
     return true;
   }
@@ -200,8 +200,10 @@ class TwitterMassFollow {
       return false
     }
     if ( this._isLimitReached() ) {
-      this.activeBtn.text = 'Limit reached (see settings)'
+      this.activeBtn.text = 'Limit reached'
       this.paused = true
+      // Unset limit for current run, so the user is able to continue
+      this.limit = ''
       return false
     }
     Profile.next()

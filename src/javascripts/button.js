@@ -23,5 +23,9 @@ class Button {
       }, 1000)
     })
   }
+  reset() {
+    clearInterval(this.countDownInterval)
+    this.text = ''
+  }
 }
 export default Button;
