@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Twitter Mass Follow",
-  "version": "2.4",
+  "version": "2.5",
   "minimum_chrome_version": "49.0.0.0",
   "description": "Auto bulk follow and unfollow on twitter with style",
   "homepage_url": "http://tlemens.de",
