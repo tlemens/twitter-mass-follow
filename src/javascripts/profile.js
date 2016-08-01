@@ -143,7 +143,7 @@ class StreamProfile extends Profile {
     return document.getElementsByClassName('account')
   }
   static present() {
-    return StreamProfile.all().length > 3
+    return StreamProfile.all().length > 5
   }
   isStream() {
     return true
