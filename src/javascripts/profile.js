@@ -81,7 +81,6 @@ class Profile {
     }
   }
   unfollow(options) {
-    console.log(this.isVerified())
     if ( this.isFollowed() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
