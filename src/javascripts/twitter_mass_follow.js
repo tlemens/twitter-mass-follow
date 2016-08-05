@@ -112,6 +112,7 @@ class TwitterMassFollow {
     this._addSetting(TextSetting, 'unfollowWait', 100)
     this._addSetting(TextSetting, 'unfollowLimit', '')
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
+    this._addSetting(CheckboxSetting, 'unfollowSkipVerified', true)
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'extensionWait', 1)
     let showElements = document.getElementsByClassName('tmf-show-settings')
@@ -151,6 +152,7 @@ class TwitterMassFollow {
           this.element.classList.add(`tmf--${mode}`)
           this.blacklist = this._setting(`${mode}Blacklist`).split(',').map(function(item) { return item.trim() })
           this.limit = parseInt(this._setting(`${mode}Limit`))
+          this.activeBtn.title = 0
           btn.text = 'Click to pause'
           this._run()
         }
@@ -178,7 +180,8 @@ class TwitterMassFollow {
   _unfollowProfile(profile) {
     let options = {
       blacklisted: this.blacklist.includes(profile.username),
-      skipFollower: this._setting('unfollowSkipFollower')
+      skipFollower: this._setting('unfollowSkipFollower'),
+      skipVerified: this._setting('unfollowSkipVerified')
     }
     if ( profile.unfollow(options) ) {
       this.unfollowed.add(profile.recordId)

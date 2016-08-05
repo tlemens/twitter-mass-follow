@@ -81,9 +81,13 @@ class Profile {
     }
   }
   unfollow(options) {
+    console.log(this.isVerified())
     if ( this.isFollowed() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
+        return false
+      } else if ( options.skipVerified && this.isVerified() ) {
+        this.log('warn', 'Account is verified')
         return false
       } else if ( options.skipFollower && this.isFollowing() ) {
         return false
@@ -111,6 +115,9 @@ class Profile {
   }
   isProtected() {
     return this.element.getElementsByClassName('Icon--protected').length > 0
+  }
+  isVerified() {
+    return this.element.getElementsByClassName('Icon--verified').length > 0
   }
   toString() {
     return `${this.constructor.name} ${this.recordId} ${this.username}`
