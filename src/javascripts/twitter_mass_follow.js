@@ -149,7 +149,7 @@ class TwitterMassFollow {
           this.activeBtn = btn
           this.mode = mode
           this.element.classList.add(`tmf--${mode}`)
-          this.blacklist = this._setting(`${mode}Blacklist`).split(',')
+          this.blacklist = this._setting(`${mode}Blacklist`).split(',').map(function(item) { return item.trim() })
           this.limit = parseInt(this._setting(`${mode}Limit`))
           btn.text = 'Click to pause'
           this._run()
