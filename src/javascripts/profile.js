@@ -85,10 +85,10 @@ class Profile {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
         return false
+      } else if ( options.skipFollower && this.isFollowing() ) {
+        return false
       } else if ( options.skipVerified && this.isVerified() ) {
         this.log('warn', 'Account is verified')
-        return false
-      } else if ( options.skipFollower && this.isFollowing() ) {
         return false
       } else {
         this.clickBtn()

@@ -102,7 +102,7 @@ class TwitterMassFollow {
     })
   }
   _initSettings() {
-    this._addSetting(TextSetting, 'followWait', 1000)
+    this._addSetting(TextSetting, 'followWait', 500)
     this._addSetting(TextSetting, 'followLimit', 1000)
     this._addSetting(CheckboxSetting, 'followSkipUnfollowed', true)
     this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
@@ -112,7 +112,7 @@ class TwitterMassFollow {
     this._addSetting(TextSetting, 'unfollowWait', 100)
     this._addSetting(TextSetting, 'unfollowLimit', '')
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
-    this._addSetting(CheckboxSetting, 'unfollowSkipVerified', true)
+    this._addSetting(CheckboxSetting, 'unfollowSkipVerified', false)
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'extensionWait', 1)
     let showElements = document.getElementsByClassName('tmf-show-settings')
@@ -150,7 +150,7 @@ class TwitterMassFollow {
           this.activeBtn = btn
           this.mode = mode
           this.element.classList.add(`tmf--${mode}`)
-          this.blacklist = this._setting(`${mode}Blacklist`).split(',').map(function(item) { return item.trim() })
+          this.blacklist = this._setting(`${mode}Blacklist`).split(',').map(name => name.trim())
           this.limit = parseInt(this._setting(`${mode}Limit`))
           this.activeBtn.title = 0
           btn.text = 'Click to pause'
