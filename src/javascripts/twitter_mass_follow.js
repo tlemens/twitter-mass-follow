@@ -21,7 +21,8 @@ class TwitterMassFollow {
     })
   }
   showOrHide() {
-    if ( Profile.present() ) {
+    this._setUserId()
+    if ( this.userId && Profile.present() ) {
       this.show()
     } else {
       this.hide()
@@ -84,16 +85,18 @@ class TwitterMassFollow {
       this.count = 0
       this.paused = false
       this.waiting = false
-      if (this.userId) {
+      if (this.initialized) {
         this._reset()
         resolve()
       } else {
         try {
-          this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId.toString()
           this._setButtons()
           this._initSettings()
           this.unfollowed = new Unfollowed(this.userId)
-          this.unfollowed.load().then(() => { resolve() })
+          this.unfollowed.load().then(() => { 
+            this.initialized = true
+            resolve() 
+          })
         }
         catch(err) {
           reject(err)
@@ -159,6 +162,14 @@ class TwitterMassFollow {
       })
       this[`${mode}Btn`] = btn
     })
+  }
+  _setUserId() {
+    if ( undefined === this.userId ) {
+      try {
+        this.userId = document.getElementById('user-dropdown').querySelectorAll('[data-user-id]')[0].dataset.userId.toString()
+      }
+      catch(ex) {}
+    }
   }
   _followProfile(profile) {
     let options = {
