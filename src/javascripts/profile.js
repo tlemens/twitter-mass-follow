@@ -146,7 +146,12 @@ class CardProfile extends Profile {
 
 class StreamProfile extends Profile {
   static all() {
-    return document.getElementsByClassName('account')
+    let scope = document.getElementsByClassName('content-main list')[0] || document.getElementsByClassName('activity-content')[0]
+    if ( scope ) {
+      return scope.getElementsByClassName('account')
+    } else {
+      return []
+    }
   }
   static present() {
     return StreamProfile.all().length > 5
