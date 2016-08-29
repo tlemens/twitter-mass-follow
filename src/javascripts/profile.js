@@ -146,11 +146,11 @@ class CardProfile extends Profile {
 
 class StreamProfile extends Profile {
   static all() {
-    let scope = document.getElementsByClassName('content-main list')[0] || document.getElementsByClassName('activity-content')[0]
-    if ( scope ) {
-      return scope.getElementsByClassName('account')
+    let dialogVisible = (document.getElementById('activity-popup-dialog').style.display === 'block')
+    if (dialogVisible) {
+      return document.querySelectorAll('.activity-popup-users > .js-stream-item > .account')
     } else {
-      return []
+      return document.querySelectorAll('#stream-items-id > .js-stream-item > .account')
     }
   }
   static present() {
