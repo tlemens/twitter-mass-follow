@@ -69,7 +69,7 @@ class Profile {
         this.log('warn', 'Protected profile');
         return false
       } else if ( options.skipFollower && this.isFollowing() ) {
-        this.log('warn', 'Allready following')
+        this.log('warn', 'Already following')
         return false
       } else {
         this.clickBtn()
