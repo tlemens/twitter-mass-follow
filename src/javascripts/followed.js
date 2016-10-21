@@ -1,6 +1,6 @@
 import StorageRecord from './storage_record.js'
 
-class Unfollowed {
+class Followed {
   constructor(userId) {
     this.storage = new StorageRecord(userId)
   }
@@ -19,10 +19,22 @@ class Unfollowed {
   includes(recordId) {
     return this.value.includes(`-${recordId}`)
   }
+  migrate(callback) {
+    if ('string' == typeof(this.value)) {
+      let userIds = this.value.split('-').filter(String)
+      this.value = {}
+      for (let i=0; i<userIds.length; i++) {
+        this.value[userIds[i]] = 0
+        let percent = Math.floor((i/userIds.length) * 100)
+        callback.call(this, percent)
+      }
+      this.storage.save(this.value)
+    }
+  }
   add(recordId) {
     this.value += recordId
     this.storage.save(this.value)
   }
 }
 
-export default Unfollowed
+export default Followed

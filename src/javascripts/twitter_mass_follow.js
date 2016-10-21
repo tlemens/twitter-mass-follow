@@ -1,6 +1,6 @@
 import Button from './button.js'
 import Profile from './profile.js'
-import Unfollowed from './unfollowed.js'
+import Followed from './followed.js'
 import get from './xhttp_helper.js'
 import { CheckboxSetting, TextSetting } from './setting.js'
 
@@ -35,17 +35,17 @@ class TwitterMassFollow {
         this.element.classList.remove('tmf--hide')
         this.element.classList.remove('tmf--follow')
         this.element.classList.remove('tmf--unfollow')
-        this.element.classList.remove('tmf--error')
+        this.element.classList.remove('tmf--message')
         this.element.classList.add('tmf--show')
       }, (errorMessage) => {     
-        this.error = errorMessage
+        this.message = errorMessage
       })
   }
-  set error(newError) {
-    this.element.getElementsByClassName('tmf__error')[0].innerHTML = newError
+  set message(newMessage) {
+    this.element.getElementsByClassName('tmf__message')[0].innerHTML = newMessage
     this.element.classList.remove('tmf--initial')
     this.element.classList.remove('tmf--hide')
-    this.element.classList.add('tmf--error')
+    this.element.classList.add('tmf--message')
     this.element.classList.add('tmf--show')
   }
   hide() {
@@ -92,8 +92,11 @@ class TwitterMassFollow {
         try {
           this._setButtons()
           this._initSettings()
-          this.unfollowed = new Unfollowed(this.userId)
-          this.unfollowed.load().then(() => { 
+          this.followed = new Followed(this.userId)
+          this.followed.load().then(() => { 
+            this.followed.migrate((percent) => {
+              this.message = `Migrating (${percent}%)`
+            })
             this.initialized = true
             resolve() 
           })

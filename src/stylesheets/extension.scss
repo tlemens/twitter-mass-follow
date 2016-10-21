@@ -89,12 +89,11 @@ $settings-width: 590px;
       display: none;
     }
   }
-  &__error {
-    color: orangered;
+  &__message {
     display: none;
   }
-  &--error { 
-    .tmf__error {
+  &--message { 
+    .tmf__message {
       display: block;
     }
     .tmf-btn,
