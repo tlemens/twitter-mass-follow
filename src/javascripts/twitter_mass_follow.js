@@ -189,7 +189,7 @@ class TwitterMassFollow {
       // Check if follow was rejected by Twitter
       setTimeout(() => {
         if ( !profile.isFollowed() ) {
-          this.followed.remove(userId)
+          this.followed.remove(profile.userId)
         }
       }, 2000)
       this.count++
@@ -204,7 +204,7 @@ class TwitterMassFollow {
       blacklisted: this.blacklist.includes(profile.username),
       skipFollower: this._setting('unfollowSkipFollower'),
       skipVerified: this._setting('unfollowSkipVerified'),
-      minDaysFollowed: this._setting('unfollowMinDaysFollowed'),
+      minDaysFollowed: parseInt(this._setting('unfollowMinDaysFollowed')),
       daysFollowed: this.followed.daysFollowed(profile.userId)
     }
     if ( profile.unfollow(options) ) {

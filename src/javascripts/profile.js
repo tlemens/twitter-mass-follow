@@ -54,7 +54,6 @@ class Profile {
     return this.element.getElementsByClassName('user-actions')[0].classList.contains('following')
   }
   follow(options) {
-    console.log(options)
     if ( this.isFollowable() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
@@ -81,6 +80,7 @@ class Profile {
     }
   }
   unfollow(options) {
+    console.log(options)
     if ( this.isFollowed() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')

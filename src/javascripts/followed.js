@@ -30,9 +30,10 @@ class Followed {
       }
       this.storage.save(this.value)
     }
+    console.log(this.value)
   }
   daysFollowed(userId) {
-    if this.includes(userId) {
+    if (this.includes(userId)) {
       let oneDay = 1000 * 60 * 60 * 24
       return Math.floor((Date.now() - this.value[userId]) / oneDay)
     }
