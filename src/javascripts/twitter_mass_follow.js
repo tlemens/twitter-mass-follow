@@ -110,7 +110,7 @@ class TwitterMassFollow {
   _initSettings() {
     this._addSetting(TextSetting, 'followWait', 500)
     this._addSetting(TextSetting, 'followLimit', 1000)
-    this._addSetting(CheckboxSetting, 'followSkipUnfollowed', true)
+    this._addSetting(CheckboxSetting, 'followSkipFollowed', true)
     this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
     this._addSetting(CheckboxSetting, 'followSkipProtected', false)
     this._addSetting(CheckboxSetting, 'followSkipFollower', false)
@@ -120,6 +120,7 @@ class TwitterMassFollow {
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
     this._addSetting(CheckboxSetting, 'unfollowSkipVerified', false)
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
+    this._addSetting(TextSetting, 'unfollowMinDaysFollowed', 2)
     this._addSetting(TextSetting, 'extensionWait', 1)
     let showElements = document.getElementsByClassName('tmf-show-settings')
     for (let i=0; i<showElements.length; i++) {
@@ -177,13 +178,20 @@ class TwitterMassFollow {
   _followProfile(profile) {
     let options = {
       blacklisted: this.blacklist.includes(profile.username),
-      skipUnfollowed: this._setting('followSkipUnfollowed'),
+      skipFollowed: this._setting('followSkipFollowed'),
       skipProtected: this._setting('followSkipProtected'),
       skipFollower: this._setting('followSkipFollower'),
-      unfollowed: this.unfollowed.includes(profile.recordId),
+      followed: this.followed.includes(profile.userId),
       profileImageRequired: this._setting('followProfileImageRequired')
     }
     if ( profile.follow(options) ) {
+      this.followed.add(profile.userId)
+      // Check if follow was rejected by Twitter
+      setTimeout(() => {
+        if ( !profile.isFollowed() ) {
+          this.followed.remove(userId)
+        }
+      }, 2000)
       this.count++
       this.activeBtn.title = this.count
       this._sleep(this._setting('followWait'))
@@ -195,10 +203,11 @@ class TwitterMassFollow {
     let options = {
       blacklisted: this.blacklist.includes(profile.username),
       skipFollower: this._setting('unfollowSkipFollower'),
-      skipVerified: this._setting('unfollowSkipVerified')
+      skipVerified: this._setting('unfollowSkipVerified'),
+      minDaysFollowed: this._setting('unfollowMinDaysFollowed'),
+      daysFollowed: this.followed.daysFollowed(profile.userId)
     }
     if ( profile.unfollow(options) ) {
-      this.unfollowed.add(profile.recordId)
       this.count++
       this.activeBtn.title = this.count
       this._sleep(this._setting('unfollowWait'))
@@ -245,4 +254,4 @@ class TwitterMassFollow {
   }
 }
 
-export default TwitterMassFollow;
+export default TwitterMassFollow

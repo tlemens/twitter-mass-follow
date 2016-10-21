@@ -37,10 +37,10 @@
           </div>
         </div>  
         <div class="control-group">
-          <label for="followSkipUnfollowed" class="t1-label control-label">Skip unfollowed</label>
+          <label for="followSkipFollowed" class="t1-label control-label">Skip followed</label>
           <div class="controls">
             <label class="t1-label checkbox">
-              <input type="checkbox" id="followSkipUnfollowed"> Skip already once unfollowed profiles
+              <input type="checkbox" id="followSkipFollowed"> Skip already once followed profiles
             </label>
           </div>
         </div>
@@ -86,6 +86,11 @@
           </div>
         </div>  
         <div class="control-group">
+          <label for="unfollowMinDaysFollowed" class="t1-label control-label">Days followed (minimum)</label>
+          <div class="controls">
+            <input type="number" id="unfollowMinDaysFollowed" step="1">
+            <p>Profiles followed less than x days will be skipped.</p>
+          </div>
           <label for="unfollowLimit" class="t1-label control-label">Limit</label>
           <div class="controls">
             <input type="number" id="unfollowLimit" step="1">

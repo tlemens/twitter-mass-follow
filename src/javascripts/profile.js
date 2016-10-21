@@ -42,7 +42,6 @@ class Profile {
     this.element = element
     this.btn = this.element.getElementsByClassName('user-actions-follow-button')[0]
     this.userId = this.element.dataset.userId
-    this.recordId = this.userId + '-'
     console.log(this.toString())
   }
   isMyProfile() {
@@ -55,12 +54,13 @@ class Profile {
     return this.element.getElementsByClassName('user-actions')[0].classList.contains('following')
   }
   follow(options) {
+    console.log(options)
     if ( this.isFollowable() ) {
       if ( options.blacklisted ) {
         this.log('warn', 'User is blacklisted')
         return false
-      } else if ( options.skipUnfollowed && options.unfollowed ) {
-        this.log('warn', 'Already unfollowed once');
+      } else if ( options.skipFollowed && options.followed ) {
+        this.log('warn', 'Already followed once');
         return false
       } else if ( options.profileImageRequired && this.hasNoProfileImage() ) {
         this.log('warn', 'No profile image');
@@ -89,6 +89,9 @@ class Profile {
         return false
       } else if ( options.skipVerified && this.isVerified() ) {
         this.log('warn', 'Account is verified')
+        return false
+      } else if ( options.daysFollowed < options.minDaysFollowed ) {
+        this.log('warn', `${options.daysFollowed} days followed, but ${options.minDaysFollowed} days minimum required`)
         return false
       } else {
         this.clickBtn()
@@ -119,7 +122,7 @@ class Profile {
     return this.element.getElementsByClassName('Icon--verified').length > 0
   }
   toString() {
-    return `${this.constructor.name} ${this.recordId} ${this.username}`
+    return `${this.constructor.name} ${this.userId} ${this.username}`
   }
 }
 

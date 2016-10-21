@@ -11,13 +11,13 @@ class Followed {
           this.value = storageValue
           resolve()
         }, () => {
-          this.value = '-'
+          this.value = {}
           resolve()
         })
     })
   }
-  includes(recordId) {
-    return this.value.includes(`-${recordId}`)
+  includes(userId) {
+    return 'number' == typeof(this.value[userId])
   }
   migrate(callback) {
     if ('string' == typeof(this.value)) {
@@ -31,8 +31,18 @@ class Followed {
       this.storage.save(this.value)
     }
   }
-  add(recordId) {
-    this.value += recordId
+  daysFollowed(userId) {
+    if this.includes(userId) {
+      let oneDay = 1000 * 60 * 60 * 24
+      return Math.floor((Date.now() - this.value[userId]) / oneDay)
+    }
+  }
+  add(userId) {
+    this.value[userId] = Date.now()
+    this.storage.save(this.value)
+  }
+  remove(userId) {
+    delete this.value[userId]
     this.storage.save(this.value)
   }
 }
