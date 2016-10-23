@@ -30,7 +30,6 @@ class Followed {
       }
       this.storage.save(this.value)
     }
-    console.log(this.value)
   }
   daysFollowed(userId) {
     if (this.includes(userId)) {

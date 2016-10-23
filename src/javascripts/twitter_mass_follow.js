@@ -114,6 +114,7 @@ class TwitterMassFollow {
     this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
     this._addSetting(CheckboxSetting, 'followSkipProtected', false)
     this._addSetting(CheckboxSetting, 'followSkipFollower', false)
+    this._addSetting(CheckboxSetting, 'followBioRequired', false)
     this._addSetting(TextSetting, 'followBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'unfollowWait', 100)
     this._addSetting(TextSetting, 'unfollowLimit', '')
@@ -182,7 +183,8 @@ class TwitterMassFollow {
       skipProtected: this._setting('followSkipProtected'),
       skipFollower: this._setting('followSkipFollower'),
       followed: this.followed.includes(profile.userId),
-      profileImageRequired: this._setting('followProfileImageRequired')
+      profileImageRequired: this._setting('followProfileImageRequired'),
+      bioRequired: this._setting('followBioRequired')
     }
     if ( profile.follow(options) ) {
       this.followed.add(profile.userId)

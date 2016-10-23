@@ -70,6 +70,9 @@ class Profile {
       } else if ( options.skipFollower && this.isFollowing() ) {
         this.log('warn', 'Already following')
         return false
+      } else if ( options.bioRequired && this.hasNoBio() ) {
+        this.log('warn', 'No biography')
+        return false
       } else {
         this.clickBtn()
         this.log('success', 'Successfully followed')
@@ -111,6 +114,9 @@ class Profile {
     el.innerHTML = text
     let bioEl = this.bioEl
     bioEl.parentNode.insertBefore(el, bioEl)
+  }
+  hasNoBio() {
+    return '' == this.bioEl.textContent.trim()
   }
   hasNoProfileImage() {
     return this.element.getElementsByClassName('js-action-profile-avatar')[0].src.includes('default_profile')
