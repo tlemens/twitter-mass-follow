@@ -9,7 +9,8 @@ function observe(element, callback) {
 
 function observeTweetReactions(callback) {
   let element = document.getElementById('activity-popup-dialog')
-  let contentEl = element.getElementsByClassName('activity-content')[0]
+  let contentEl = element.getElementsByClassName('activity-popup-dialog-users')[0]
+  console.log(contentEl)
   let initial = true
   observe(element, function(mutation) {
     if ( element.getElementsByClassName('account').length && initial ) {
