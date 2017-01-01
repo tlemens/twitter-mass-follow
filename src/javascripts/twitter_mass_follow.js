@@ -192,6 +192,7 @@ class TwitterMassFollow {
       setTimeout(() => {
         if ( !profile.isFollowed() ) {
           this.followed.remove(profile.userId)
+          profile.log('warn', 'Follow was rejected by Twitter')
         }
       }, 2000)
       this.count++
