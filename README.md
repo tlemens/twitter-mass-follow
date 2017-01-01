@@ -1,6 +1,6 @@
-# Twitter Mass Follow
+# Mass follow for Twitter
 
-[Twitter Mass Follow - Chrome Web Store](https://chrome.google.com/webstore/detail/twitter-mass-follow/lfmanfkmmgfigbnjibfemdnnfjboficn) 
+[A feature-rich Chrome extension to mass follow and unfollow on Twitter.](http://www.clemensteichmann.com/mass-follow-for-twitter.html)
 
 ![Twitter Mass Follow](https://github.com/tlemens/twitter-mass-follow/blob/master/extension/icon128.png)
 
