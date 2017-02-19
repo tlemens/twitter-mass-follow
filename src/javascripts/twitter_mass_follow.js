@@ -16,7 +16,6 @@ class TwitterMassFollow {
           this.element = document.getElementById('tmf')
           this.settingsEl = document.getElementById('tmf-settings')
           this.modalOverlayEl = document.getElementsByClassName('modal-overlay')[0]
-          console.log('updated');
           resolve()
         })
     })
@@ -189,7 +188,6 @@ class TwitterMassFollow {
       bioRequired: this._setting('followBioRequired')
     }
     if ( profile.follow(options) ) {
-      console.log(profile.userId)
       this.followed.add(profile.userId)
       // Check if follow was rejected by Twitter
       setTimeout(() => {
