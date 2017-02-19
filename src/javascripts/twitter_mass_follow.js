@@ -16,6 +16,7 @@ class TwitterMassFollow {
           this.element = document.getElementById('tmf')
           this.settingsEl = document.getElementById('tmf-settings')
           this.modalOverlayEl = document.getElementsByClassName('modal-overlay')[0]
+          console.log('updated');
           resolve()
         })
     })
@@ -120,6 +121,7 @@ class TwitterMassFollow {
     this._addSetting(TextSetting, 'unfollowLimit', '')
     this._addSetting(CheckboxSetting, 'unfollowSkipFollower', true)
     this._addSetting(CheckboxSetting, 'unfollowSkipVerified', false)
+    this._addSetting(CheckboxSetting, 'unfollowMassFollowedRequired', false)
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'unfollowMinDaysFollowed', 2)
     this._addSetting(TextSetting, 'extensionWait', 1)
@@ -187,10 +189,11 @@ class TwitterMassFollow {
       bioRequired: this._setting('followBioRequired')
     }
     if ( profile.follow(options) ) {
+      console.log(profile.userId)
       this.followed.add(profile.userId)
       // Check if follow was rejected by Twitter
       setTimeout(() => {
-        if ( !profile.isFollowed() ) {
+        if ( profile.isFollowable() ) {
           this.followed.remove(profile.userId)
           profile.log('warn', 'Follow was rejected by Twitter')
         }
@@ -205,10 +208,12 @@ class TwitterMassFollow {
   _unfollowProfile(profile) {
     let options = {
       blacklisted: this.blacklist.includes(profile.username),
-      skipFollower: this._setting('unfollowSkipFollower'),
-      skipVerified: this._setting('unfollowSkipVerified'),
+      daysFollowed: this.followed.daysFollowed(profile.userId),
+      massFollowed: this.followed.includes(profile.userId),
+      massFollowedRequired: this._setting('unfollowMassFollowedRequired'),
       minDaysFollowed: parseInt(this._setting('unfollowMinDaysFollowed')),
-      daysFollowed: this.followed.daysFollowed(profile.userId)
+      skipFollower: this._setting('unfollowSkipFollower'),
+      skipVerified: this._setting('unfollowSkipVerified')
     }
     if ( profile.unfollow(options) ) {
       this.count++

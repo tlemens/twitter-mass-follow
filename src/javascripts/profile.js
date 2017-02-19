@@ -85,10 +85,13 @@ class Profile {
   unfollow(options) {
     console.log(options)
     if ( this.isFollowed() ) {
-      if ( options.blacklisted ) {
-        this.log('warn', 'User is blacklisted')
+      if ( options.skipFollower && this.isFollowing() ) {
         return false
-      } else if ( options.skipFollower && this.isFollowing() ) {
+      } else if ( options.massFollowedRequired && !options.massFollowed ) {
+        this.log('warn', 'User has not been mass followed')
+        return false
+      } else if ( options.blacklisted ) {
+        this.log('warn', 'User is blacklisted')
         return false
       } else if ( options.skipVerified && this.isVerified() ) {
         this.log('warn', 'Account is verified')
