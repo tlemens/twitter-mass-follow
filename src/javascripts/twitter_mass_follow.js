@@ -108,7 +108,7 @@ class TwitterMassFollow {
     })
   }
   _initSettings() {
-    this._addSetting(TextSetting, 'followWait', 500)
+    this._addSetting(TextSetting, 'followWait', 1000)
     this._addSetting(TextSetting, 'followLimit', 1000)
     this._addSetting(CheckboxSetting, 'followSkipFollowed', true)
     this._addSetting(CheckboxSetting, 'followProfileImageRequired', false)
