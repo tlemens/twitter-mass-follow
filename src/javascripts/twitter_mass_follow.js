@@ -37,7 +37,7 @@ class TwitterMassFollow {
         this.element.classList.remove('tmf--unfollow')
         this.element.classList.remove('tmf--message')
         this.element.classList.add('tmf--show')
-      }, (errorMessage) => {     
+      }, (errorMessage) => {
         this.message = errorMessage
       })
   }
@@ -64,7 +64,7 @@ class TwitterMassFollow {
   }
   wait() {
     this.waiting = true
-    this.activeBtn.countDown(this._setting('extensionWait')).then(() => { 
+    this.activeBtn.countDown(this._setting('extensionWait')).then(() => {
       this.waiting = false
       this.activeBtn.text = 'Click to pause'
       this._run()
@@ -93,12 +93,12 @@ class TwitterMassFollow {
           this._setButtons()
           this._initSettings()
           this.followed = new Followed(this.userId)
-          this.followed.load().then(() => { 
+          this.followed.load().then(() => {
             this.followed.migrate((percent) => {
               this.message = `Migrating (${percent}%)`
             })
             this.initialized = true
-            resolve() 
+            resolve()
           })
         }
         catch(err) {
@@ -247,7 +247,7 @@ class TwitterMassFollow {
           this.activeBtn.text = 'No more profiles found'
           this.paused = true
         } else {
-          this.currentProfile.btn.focus()
+          window.scrollTo(0, document.body.scrollHeight)
           this._sleep(1000)
         }
       })
