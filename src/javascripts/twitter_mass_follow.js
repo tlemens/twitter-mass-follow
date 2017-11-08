@@ -124,6 +124,7 @@ class TwitterMassFollow {
     this._addSetting(TextSetting, 'unfollowBlacklist', '@username1,@username2')
     this._addSetting(TextSetting, 'unfollowMinDaysFollowed', 2)
     this._addSetting(TextSetting, 'extensionWait', 1)
+    this._addSetting(CheckboxSetting, 'hideProfileImages', false)
     let showElements = document.getElementsByClassName('tmf-show-settings')
     for (let i=0; i<showElements.length; i++) {
       showElements[i].addEventListener('click', () => { this._showSettings() })
@@ -163,6 +164,9 @@ class TwitterMassFollow {
           this.limit = parseInt(this._setting(`${mode}Limit`))
           this.activeBtn.title = 0
           btn.text = 'Click to pause'
+          if (this._setting('hideProfileImages')) {
+            document.body.classList.add('tmf-hide-profile-images')
+          }
           this._run()
         }
       })

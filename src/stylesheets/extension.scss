@@ -92,7 +92,7 @@ $settings-width: 590px;
   &__message {
     display: none;
   }
-  &--message { 
+  &--message {
     .tmf__message {
       display: block;
     }
@@ -179,5 +179,21 @@ $settings-width: 590px;
     content: attr(data-success-message);
     float: left;
     position: relative;
+  }
+}
+
+// Performance tuning
+
+.tmf-hide-profile-images {
+
+  .ProfileCard-avatarImage {
+    display: none;
+  }
+  .ProfileCard-bg {
+    background-image: none !important;
+  }
+
+  .js-stream-item .avatar {
+    display: none;
   }
 }
