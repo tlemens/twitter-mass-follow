@@ -1,0 +1,13 @@
+version: '3'
+services:
+  dev:
+    container_name: twitter-mass-follow
+    build:
+      context: .
+    volumes:
+      - .:/twitter-mass-follow
+      - node_modules:/twitter-mass-follow/node_modules
+    command: gulp
+
+volumes:
+  node_modules:

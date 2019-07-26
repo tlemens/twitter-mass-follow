@@ -1,7 +1,7 @@
 'use strict'
 
-const paths = { 
-  js:   ['src/javascripts/*.js'],
+const paths = {
+  js:   ['src/javascripts/*/**.js'],
   sass: ['src/stylesheets/extension.scss']
 }
 

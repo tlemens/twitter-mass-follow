@@ -1,14 +1,20 @@
 import TwitterMassFollow from './twitter_mass_follow.js'
 import { observePageAction, observeFollowLimitsMessage } from './page_observer.js'
+import isNewTwitter from './new_twitter/is_new_twitter'
+import NewTwitterNotification from './new_twitter/notification'
 
 let extension = new TwitterMassFollow()
 
 extension.load().then(() => {
-  extension.showOrHide()
-  observePageAction(() => {
+  if (isNewTwitter()) {
+    NewTwitterNotification.show()
+  } else {
     extension.showOrHide()
-  })
-  observeFollowLimitsMessage(() => {
-    extension.wait()
-  })
+    observePageAction(() => {
+      extension.showOrHide()
+    })
+    observeFollowLimitsMessage(() => {
+      extension.wait()
+    })
+  }
 })
