@@ -6,15 +6,13 @@ let listItem
 const migrateData = () => {
   chrome.storage.local.get(null, (items) => {
     console.log(items)
-    Object.keys(items).forEach(key => {
-      const records = items[key]
+    Object.keys(items).forEach(creatorId => {
+      const records = items[creatorId]
       if (typeof(records) === 'object') {
         Object.keys(records).forEach(userId => {
           const createdAt = records[userId]
           if (typeof(createdAt) === 'number') {
-            console.log(userId)
-            console.log(createdAt)
-            FollowRecord.add(userId, createdAt)
+            FollowRecord.add(creatorId, userId, createdAt)
             listItem.innerHTML = `Migrated userId: ${userId} createdAt: ${createdAt}`
           }
         })

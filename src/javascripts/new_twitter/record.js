@@ -1,9 +1,9 @@
-const request = window.indexedDB.open('MassFollowForTwitter', 2)
+const request = window.indexedDB.open('MassFollowForTwitter', 3)
 let db
 
 request.onupgradeneeded = (event) => {
   db = event.target.result
-  db.createObjectStore('followRecord', { keyPath: 'userId' })
+  db.createObjectStore('v2FollowRecord', { keyPath: ['creatorId', 'userId'] })
 }
 
 request.onerror = (event) => {
@@ -15,17 +15,9 @@ request.onsuccess = (event) => {
 }
 
 export default {
-  add (type, record) {
-    db.transaction([type], 'readwrite')
-      .objectStore(type)
+  add (storeName, record) {
+    db.transaction([storeName], 'readwrite')
+      .objectStore(storeName)
       .add(record)
-  },
-  get (type, userId) {
-    return new Promise(resolve => {
-      const request = db.transaction([type]).objectStore(type).get(userId)
-      request.onsuccess = () => {
-        resolve(request.result)
-      }
-    })
   }
 }

@@ -1,8 +1,8 @@
 import Record from './record'
 
 export default {
-  add (userId, createdAt) {
-    const record  = { createdAt: createdAt, userId: userId }
-    return Record.add('followRecord', record)
+  add (creatorId, userId, createdAt) {
+    const record  = { createdAt: createdAt, creatorId: creatorId, userId: userId }
+    return Record.add('v2FollowRecord', record)
   }
 }
